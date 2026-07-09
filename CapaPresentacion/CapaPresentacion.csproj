@@ -43,7 +43,23 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BCrypt.Net-Next, Version=4.1.0.0, Culture=neutral, PublicKeyToken=1e11be04b6288443, processorArchitecture=MSIL">
+      <HintPath>..\packages\BCrypt.Net-Next.4.1.0\lib\net462\BCrypt.Net-Next.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Buffers, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.6.1\lib\net462\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Memory, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.6.3\lib\net462\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.6.1\lib\net462\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.1.2\lib\net462\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -2849,6 +2865,7 @@
     <Content Include="assets\vendor\toastr\toastr.min.js" />
     <Content Include="assets\vendor\vanilla-wizard\js\wizard.min.js" />
     <Content Include="assets\vendor\wnumb\wNumb.min.js" />
+    <Content Include="Default.aspx" />
     <Content Include="EmpresasTrans.aspx" />
     <Content Include="Imagenes\9ec8b515-ef33-4c60-9629-9390b21e1cd5.jpg" />
     <Content Include="Imagenes\imglogin.png" />
@@ -2860,10 +2877,30 @@
     <Content Include="Inicio.aspx" />
     <Content Include="js\Clientes.js" />
     <Content Include="js\Empresas.js" />
+    <Content Include="js\Login.js" />
     <Content Include="js\Masterpa.js" />
+    <Content Include="js\UsuariosEmpresa.js" />
+    <Content Include="Login.aspx" />
+    <Content Include="LogosEmp\logoEmp.jpg" />
+    <Content Include="MasterEmpre\Clientes.aspx" />
+    <Content Include="MasterEmpre\InicioEmpresa.aspx" />
+    <Content Include="MasterEmpre\jsEmpre\Clientes.js" />
+    <Content Include="MasterEmpre\jsEmpre\Masterpa.js" />
+    <Content Include="MasterEmpre\jsEmpre\TerminalParada.js" />
+    <Content Include="MasterEmpre\jsEmpre\Usuarios.js" />
+    <Content Include="MasterEmpre\TerminalParada.aspx" />
+    <Content Include="MasterEmpre\Usuarios.aspx" />
+    <Content Include="UsuariosEmpresa.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
     <Compile Include="EmpresasTrans.aspx.cs">
       <DependentUpon>EmpresasTrans.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2878,6 +2915,48 @@
     <Compile Include="Inicio.aspx.designer.cs">
       <DependentUpon>Inicio.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Login.aspx.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Login.aspx.designer.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MasterEmpre\Clientes.aspx.cs">
+      <DependentUpon>Clientes.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterEmpre\Clientes.aspx.designer.cs">
+      <DependentUpon>Clientes.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MasterEmpre\EmpresasMaster.Master.cs">
+      <DependentUpon>EmpresasMaster.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterEmpre\EmpresasMaster.Master.designer.cs">
+      <DependentUpon>EmpresasMaster.Master</DependentUpon>
+    </Compile>
+    <Compile Include="MasterEmpre\InicioEmpresa.aspx.cs">
+      <DependentUpon>InicioEmpresa.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterEmpre\InicioEmpresa.aspx.designer.cs">
+      <DependentUpon>InicioEmpresa.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MasterEmpre\TerminalParada.aspx.cs">
+      <DependentUpon>TerminalParada.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterEmpre\TerminalParada.aspx.designer.cs">
+      <DependentUpon>TerminalParada.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MasterEmpre\Usuarios.aspx.cs">
+      <DependentUpon>Usuarios.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterEmpre\Usuarios.aspx.designer.cs">
+      <DependentUpon>Usuarios.aspx</DependentUpon>
+    </Compile>
     <Compile Include="PageMaster.Master.cs">
       <DependentUpon>PageMaster.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2886,6 +2965,14 @@
       <DependentUpon>PageMaster.Master</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UsuariosEmpresa.aspx.cs">
+      <DependentUpon>UsuariosEmpresa.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UsuariosEmpresa.aspx.designer.cs">
+      <DependentUpon>UsuariosEmpresa.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Utilidades.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="assets\css\app-rtl.min.css.map" />
@@ -2948,6 +3035,7 @@
     <Content Include="assets\vendor\gmaps\umd.hbs" />
     <Content Include="assets\vendor\gmaps\yarn-error.log" />
     <Content Include="assets\vendor\wnumb\LICENSE.MD" />
+    <Content Include="MasterEmpre\EmpresasMaster.Master" />
     <None Include="packages.config" />
     <Content Include="PageMaster.Master" />
     <None Include="Web.Debug.config">
@@ -2986,6 +3074,16 @@
     <Folder Include="assets\vendor\rater-js\example\" />
     <Folder Include="assets\vendor\rater-js\test\" />
     <Folder Include="assets\vendor\swiper\types\modules\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CapaEntidad\CapaEntidad.csproj">
+      <Project>{84acbe3b-3a34-4eb6-b0d4-8e55717cd615}</Project>
+      <Name>CapaEntidad</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CapaNegocio\CapaNegocio.csproj">
+      <Project>{42c4bb1b-cd7c-43c0-9312-0c80dd14978c}</Project>
+      <Name>CapaNegocio</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

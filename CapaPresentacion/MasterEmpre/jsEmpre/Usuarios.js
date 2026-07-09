@@ -4,105 +4,140 @@ let tablaData;
 let idEditar = 0;
 
 $(document).ready(function () {
-    listaEmpresas();
+    listaUsuariosEmpresa();
+    cargarRoles();
 });
 
-function listaEmpresas() {
-    //if ($.fn.DataTable.isDataTable("#tbRutas")) {
-    //    $("#tbRutas").DataTable().destroy();
-    //    $('#tbRutas tbody').empty();
-    //}
+function cargarRoles() {
+
+    // Mostramos un texto de "Cargando..." mientras esperamos la respuesta
+    $("#cboRol").html('<option value="">Cargando...</option>');
+
+    $.ajax({
+        url: "/UsuariosEmpresa.aspx/ListaRoles",
+        type: "POST",
+        data: "{}", // <-- Mejor compatibilidad con WebMethods sin parámetros
+        contentType: 'application/json; charset=utf-8',
+        dataType: "json",
+        success: function (response) {
+            if (response.d.Estado) {
+
+                let opcionesHTML = '<option value="">-- Seleccione --</option>';
+
+                $.each(response.d.Data, function (i, row) {
+                    opcionesHTML += `<option value="${row.IdRol}">${row.NombreRol}</option>`;
+                });
+
+                $("#cboRol").html(opcionesHTML);
+
+            } else {
+                $("#cboRol").html('<option value="">Error al cargar</option>');
+            }
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            console.log(xhr.status + " \n" + xhr.responseText, "\n" + thrownError);
+            $("#cboRol").html('<option value="">Error de conexión</option>');
+        }
+    });
+}
+
+function listaUsuariosEmpresa() {
 
     tablaData = $("#tbData").DataTable({
         responsive: true,
         "ajax": {
-            "url": 'EmpresasTrans.aspx/ListaEmpresas',
+            "url": 'Usuarios.aspx/ObtenerUsuariosEmpresa',
             "type": "POST",
             "contentType": "application/json; charset=utf-8",
             "dataType": "json",
-            "data": function (d) {
-                return JSON.stringify(d);
+            "data": function () {
+                return "{}"; // Como tu WebMethod usa Sesión, no necesita parámetros de entrada
             },
             "dataSrc": function (json) {
                 if (json.d.Estado) {
                     return json.d.Data;
                 } else {
+                    mostrarAlertaZero("¡Atención!", json.d.Mensaje, "error");
                     return [];
                 }
             }
         },
         "columns": [
-            // 1. COLUMNA: LOGO + RAZÓN SOCIAL + NIT
+            // 1. COLUMNA: FOTO + NOMBRES + CORREO/CELULAR
             {
                 "data": null,
                 render: function (data, type, row) {
-                    // Si no tiene logo, cargamos la imagen por defecto
-                    let logoUrl = row.LogoUrl ? row.LogoUrl : "LogosEmp/logoEmp.jpg";
-                    let nitTexto = row.NIT ? row.NIT : "S/N";
+                    let fotoUrl = row.FotoUrl ? row.FotoUrl : "../Imagenes/sinImagen.png";
+                    let nombreCompleto = row.Nombres + " " + row.Apellidos;
 
                     return `
                         <div class="d-flex align-items-center">
-                            <div class="flex-shrink-0 me-3 bg-light border rounded d-flex justify-content-center align-items-center p-1" style="width: 90px; height: 55px;">
-                                <img src="${logoUrl}" alt="Logo" class="img-fluid" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                            <div class="flex-shrink-0 me-3">
+                                <img src="${fotoUrl}" alt="Avatar" class="rounded-circle border border-2 border-white shadow-sm" style="width: 45px; height: 45px; object-fit: cover;">
                             </div>
                             <div class="d-flex flex-column">
-                                <span class="fw-bold text-body fs-15 mb-1">${row.RazonSocial}</span>
-                                <div>
-                                    <span class="badge border border-secondary text-secondary fs-12 px-2 py-1">
-                                        <i class="ti ti-id me-1"></i>NIT: ${nitTexto}
-                                    </span>
+                                <span class="fw-bold text-dark fs-15 mb-1">${nombreCompleto}</span>
+                                <div class="d-flex align-items-center gap-3">
+                                    <span class="text-muted fs-13"><i class="ti ti-mail text-secondary me-1"></i>${row.Correo}</span>
+                                    <span class="text-muted fs-13"><i class="ti ti-phone text-secondary me-1"></i>${row.Celular}</span>
                                 </div>
                             </div>
                         </div>`;
                 }
             },
 
-            // 2. COLUMNA: TELÉFONO + DIRECCIÓN
+            // 2. COLUMNA: DOCUMENTO CI
+            {
+                "data": "NroCi",
+                render: function (data) {
+                    return `<span class="badge border border-secondary text-secondary fs-13 px-2 py-1">
+                                <i class="ti ti-id me-1"></i>${data}
+                            </span>`;
+                }
+            },
+
+            // 3. COLUMNA: EMPRESA Y ROL
             {
                 "data": null,
                 render: function (data, type, row) {
-                    let telefono = row.Telefono ?
-                        `<a href="tel:${row.Telefono}" class="text-success fw-semibold text-decoration-none"><i class="ti ti-phone me-1"></i>${row.Telefono}</a>` :
-                        `<span class="text-muted fst-italic fs-13">Sin teléfono</span>`;
-
-                    let direccion = row.Direccion ? row.Direccion : "Sin dirección registrada";
-
                     return `
-                        <div class="d-flex flex-column">
-                            <div class="mb-1">${telefono}</div>
-                            <div class="text-muted fs-13 text-truncate" style="max-width: 250px;" title="${direccion}">
-                                <i class="ti ti-map-pin me-1"></i>${direccion}
-                            </div>
+                        <div class="d-flex flex-column gap-1 align-items-start">
+                            <span class="badge bg-info-subtle text-info fs-12 px-2 py-1">
+                                <i class="ti ti-building me-1"></i>${row.NombreEmpresa}
+                            </span>
+                            <span class="badge bg-info-subtle text-info fs-12 px-2 py-1">
+                                <i class="ti ti-user-shield me-1"></i>${row.NombreRol}
+                            </span>
                         </div>`;
                 }
             },
 
-            // 3. COLUMNA: ESTADO (Con colores dinámicos de Boron)
+            // 4. COLUMNA: ESTADO
             {
                 "data": "Estado",
                 "className": "text-center",
                 render: function (data) {
                     if (data) {
                         return `<span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1 fs-12">
-                                    <i class="ti ti-circle-check me-1"></i>Activo
+                                    <i class="ti ti-user-check me-1"></i>Activo
                                 </span>`;
                     } else {
                         return `<span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2 py-1 fs-12">
-                                    <i class="ti ti-circle-x me-1"></i>Inactivo
+                                    <i class="ti ti-user-x me-1"></i>Bloqueado
                                 </span>`;
                     }
                 }
             },
 
-            // 4. COLUMNA: OPCIONES
+            // 5. COLUMNA: OPCIONES
             {
                 "defaultContent": `
-                    <button class="btn btn-soft-primary btn-icon btn-sm rounded-circle btn-editar me-1" title="Editar">
+                    <button class="btn btn-soft-primary btn-icon btn-sm rounded-circle btn-editar me-1" title="Editar Usuario">
                         <i class="ti ti-pencil fs-16"></i>
                     </button>`,
                 "orderable": false,
                 "searchable": false,
-                "className": "text-center"
+                "className": "text-center align-middle"
             }
         ],
         "order": [],
@@ -120,16 +155,19 @@ $('#tbData tbody').on('click', '.btn-editar', function () {
     }
 
     let data = tablaData.row(fila).data();
-    idEditar = data.IdEmpresa;
+    idEditar = data.IdUsuario;
 
-    $("#txtRazonSocial").val(data.RazonSocial);
-    $("#txtNIT").val(data.NIT);
-    $("#txtDireccion").val(data.Direccion);
-    $("#txtTelefono").val(data.Telefono);
+    $("#txtNombres").val(data.Nombres);
+    $("#txtApellidos").val(data.Apellidos);
+    $("#txtCorreo").val(data.Correo);
+    $("#txtCelular").val(data.Celular);
+    $("#txtNroCi").val(data.NroCi);
+
+    $("#cboRol").val(data.IdRol);
 
     $("#cboEstado").val(data.Estado ? 1 : 0).prop("disabled", false);
 
-    $("#imgLogo").attr("src", data.LogoUrl || "LogosEmp/logoEmp.jpg");
+    $("#imgFoto").attr("src", data.FotoUrl || "../Imagenes/sinImagen.png");
     $("#txtFoto").val("");
 
     $("#modalLabelTitulos").text("Editar Registro");
@@ -169,7 +207,7 @@ function mostrarImagenSeleccionada(input) {
     }
 
     // Si todo es válido → mostrar vista previa
-    reader.onload = (e) => $('#imgLogo').attr('src', e.target.result);
+    reader.onload = (e) => $('#imgFoto').attr('src', e.target.result);
     reader.readAsDataURL(file);
 }
 
@@ -177,9 +215,8 @@ function esImagen(file) {
     return file && file.type.startsWith("image/");
 }
 
-// Función auxiliar para limpiar (DRY - Don't Repeat Yourself)
 function resetearVistaFoto(input) {
-    $('#imgLogo').attr('src', "LogosEmp/logoEmp.jpg");
+    $('#imgFoto').attr('src', "../Imagenes/sinImagen.png");
     input.value = ""; // Limpia el input file
 }
 
@@ -191,19 +228,23 @@ $("#btnNuevoRegistro").on("click", function () {
 
     idEditar = 0;
 
-    $("#txtRazonSocial").val("");
-    $("#txtNIT").val("");
-    $("#txtTelefono").val("");
-    $("#txtDireccion").val("");
+    $("#txtNombres").val("");
+    $("#txtApellidos").val("");
+    $("#txtCorreo").val("");
+    $("#txtCelular").val("");
+    $("#txtNroCi").val("");
+
+    $("#cboRol").val("");
     $("#cboEstado").val(1).prop("disabled", true);
 
-    $('#imgLogo').attr('src', "LogosEmp/logoEmp.jpg");
+    $('#imgFoto').attr('src', "../Imagenes/sinImagen.png");
     $("#txtFoto").val("");
 
-    // 4. Mostramos el modal
     $("#modalLabelTitulos").text("Nuevo Registro");
+
     $("#modalAdd").modal("show");
-});
+
+})
 
 function habilitarBoton() {
     $('#btnGuardarCambios').prop('disabled', false);
@@ -212,6 +253,8 @@ function habilitarBoton() {
 $("#btnGuardarCambios").on("click", function () {
     // Bloqueo inmediato
     $('#btnGuardarCambios').prop('disabled', true);
+
+    let idRol = $("#cboRol").val();
 
     const inputs = $("#modalAdd input.model").serializeArray();
     const inputs_sin_valor = inputs.filter(item => item.value.trim() === "");
@@ -227,20 +270,29 @@ $("#btnGuardarCambios").on("click", function () {
         return;
     }
 
+    if (idRol === "") {
+        ToastMaster.fire({
+            icon: 'warning',
+            title: 'Debe seleccionar un Rol.'
+        });
+        $("#cboRol").focus();
+        habilitarBoton();
+        return;
+    }
+
     // 2. ARMAR EL OBJETO
     const objeto = {
-        IdEmpresa: idEditar,
-        RazonSocial: $("#txtRazonSocial").val().trim(),
-        NIT: $("#txtNIT").val().trim(),
-        Direccion: $("#txtDireccion").val().trim(),
-        Telefono: $("#txtTelefono").val().trim(),
+        IdUsuario: idEditar,
+        IdRol: parseInt(idRol),
+        NroCi: $("#txtNroCi").val().trim(),
+        Nombres: $("#txtNombres").val().trim(),
+        Apellidos: $("#txtApellidos").val().trim(),
+        Celular: $("#txtCelular").val().trim(),
+        Correo: $("#txtCorreo").val().trim(),
         Estado: ($("#cboEstado").val() === "1" ? true : false),
-        LogoUrl: "" // Lo enviamos siempre vacío. Si hay foto nueva, el Base64 la reemplazará en C#.
+        FotoUrl: "" // Lo enviamos siempre vacío. Si hay foto nueva, el Base64 la reemplazará en C#.
     };
 
-    //let ver = objeto.IdRegional;
-
-    // 3. PROCESAR EL INPUT FILE
     const fileInput = document.getElementById('txtFoto');
     const file = fileInput.files[0];
 
@@ -251,21 +303,21 @@ $("#btnGuardarCambios").on("click", function () {
             const base64String = e.target.result.split(',')[1];
 
             // Disparamos el AJAX enviando la imagen
-            enviarAjaxEmpresa(objeto, base64String);
+            enviarAjaxUsuario(objeto, base64String);
         };
         reader.readAsDataURL(file);
     } else {
         // Si no hay foto, disparamos el AJAX mandando el base64 vacío
-        enviarAjaxEmpresa(objeto, "");
+        enviarAjaxUsuario(objeto, "");
     }
 });
 
-function enviarAjaxEmpresa(objeto, base64String) {
+function enviarAjaxUsuario(objeto, base64String) {
     $("#modalAdd").find("div.modal-content").LoadingOverlay("show");
 
     $.ajax({
         type: "POST",
-        url: "EmpresasTrans.aspx/GuardarOrEditEmpresa",
+        url: "Usuarios.aspx/GuardarOrEditUsuarios",
         data: JSON.stringify({ objeto: objeto, base64Image: base64String }),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
@@ -283,6 +335,7 @@ function enviarAjaxEmpresa(objeto, base64String) {
                 if (tablaData) {
                     tablaData.ajax.reload(null, false);
                 }
+
                 idEditar = 0;
             }
         },

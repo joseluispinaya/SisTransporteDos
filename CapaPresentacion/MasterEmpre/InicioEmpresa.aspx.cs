@@ -7,9 +7,9 @@ using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace CapaPresentacion
+namespace CapaPresentacion.MasterEmpre
 {
-    public partial class Inicio : System.Web.UI.Page
+    public partial class InicioEmpresa : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {

@@ -138,19 +138,19 @@ $(document).ready(function () {
     const usuario = sessionStorage.getItem('userTrans');
 
     if (!usuario) {
-        window.location.replace('Login.aspx');
+        window.location.replace('../Login.aspx');
         return;
     }
 
     try {
         const usua = JSON.parse(usuario);
         // mostrar la imagen y nombre del usuairo 
-        $("#imgUserTra").attr("src", usua.FotoUrl || "Imagenes/sinImagen.png");
+        $("#imgUserTra").attr("src", usua.FotoUrl || "/Imagenes/sinImagen.png");
         $("#lblRol").text(usua.NombreRol);
     } catch (error) {
         console.error("Error leyendo sesión", error);
         sessionStorage.clear();
-        window.location.replace('Login.aspx');
+        window.location.replace('../Login.aspx');
     }
 });
 
@@ -181,7 +181,7 @@ function EjecutarCierreSesion() {
     $.ajax({
         // Asegúrate que la ruta apunte a donde pusiste el WebMethod
         // Si estás en MasterEstudiante/Inicio.aspx, la ruta es "Inicio.aspx/CerrarSesion"
-        url: "Inicio.aspx/CerrarSesion",
+        url: "InicioEmpresa.aspx/CerrarSesion",
         type: "POST",
         data: "{}",
         dataType: "json",
@@ -191,18 +191,16 @@ function EjecutarCierreSesion() {
                 // 1. Limpiar rastro en cliente
                 sessionStorage.clear();
 
-                // 2. Redireccionar
-                // Usamos 'replace' para que el usuario no pueda volver atrás con el botón del navegador
-                // Ajusta la ruta "../Login.aspx" dependiendo de qué tan adentro esté tu archivo
-                window.location.replace('Login.aspx');
+                window.location.replace('../Login.aspx');
             }
         },
         error: function (xhr, ajaxOptions, thrownError) {
             console.log("Error al cerrar sesión");
             // Si falla el servidor, igual sacamos al usuario visualmente por seguridad
             sessionStorage.clear();
-            //localStorage.clear();
-            window.location.replace('Login.aspx');
+            window.location.replace('../Login.aspx');
         }
     });
 }
+
+// globales

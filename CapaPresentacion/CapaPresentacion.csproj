@@ -2869,6 +2869,7 @@
     <Content Include="EmpresasTrans.aspx" />
     <Content Include="Imagenes\9ec8b515-ef33-4c60-9629-9390b21e1cd5.jpg" />
     <Content Include="Imagenes\imglogin.png" />
+    <Content Include="Imagenes\imgselect.png" />
     <Content Include="Imagenes\logoflotas.png" />
     <Content Include="Imagenes\portadaApp.jpg" />
     <Content Include="Imagenes\rutasFlotas.png" />
@@ -2883,11 +2884,15 @@
     <Content Include="Login.aspx" />
     <Content Include="LogosEmp\logoEmp.jpg" />
     <Content Include="MasterEmpre\Clientes.aspx" />
+    <Content Include="MasterEmpre\Conductores.aspx" />
     <Content Include="MasterEmpre\InicioEmpresa.aspx" />
     <Content Include="MasterEmpre\jsEmpre\Clientes.js" />
+    <Content Include="MasterEmpre\jsEmpre\Conductores.js" />
     <Content Include="MasterEmpre\jsEmpre\Masterpa.js" />
+    <Content Include="MasterEmpre\jsEmpre\TarifasRuta.js" />
     <Content Include="MasterEmpre\jsEmpre\TerminalParada.js" />
     <Content Include="MasterEmpre\jsEmpre\Usuarios.js" />
+    <Content Include="MasterEmpre\TarifasRuta.aspx" />
     <Content Include="MasterEmpre\TerminalParada.aspx" />
     <Content Include="MasterEmpre\Usuarios.aspx" />
     <Content Include="UsuariosEmpresa.aspx" />
@@ -2929,6 +2934,13 @@
     <Compile Include="MasterEmpre\Clientes.aspx.designer.cs">
       <DependentUpon>Clientes.aspx</DependentUpon>
     </Compile>
+    <Compile Include="MasterEmpre\Conductores.aspx.cs">
+      <DependentUpon>Conductores.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterEmpre\Conductores.aspx.designer.cs">
+      <DependentUpon>Conductores.aspx</DependentUpon>
+    </Compile>
     <Compile Include="MasterEmpre\EmpresasMaster.Master.cs">
       <DependentUpon>EmpresasMaster.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2942,6 +2954,13 @@
     </Compile>
     <Compile Include="MasterEmpre\InicioEmpresa.aspx.designer.cs">
       <DependentUpon>InicioEmpresa.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MasterEmpre\TarifasRuta.aspx.cs">
+      <DependentUpon>TarifasRuta.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterEmpre\TarifasRuta.aspx.designer.cs">
+      <DependentUpon>TarifasRuta.aspx</DependentUpon>
     </Compile>
     <Compile Include="MasterEmpre\TerminalParada.aspx.cs">
       <DependentUpon>TerminalParada.aspx</DependentUpon>

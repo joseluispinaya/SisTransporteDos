@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConexionBD.cs" />
+    <Compile Include="DBuses.cs" />
     <Compile Include="DCiudadParada.cs" />
     <Compile Include="DCliente.cs" />
     <Compile Include="DEmpresa.cs" />

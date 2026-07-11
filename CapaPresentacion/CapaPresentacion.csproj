@@ -2871,6 +2871,7 @@
     <Content Include="Imagenes\imglogin.png" />
     <Content Include="Imagenes\imgselect.png" />
     <Content Include="Imagenes\logoflotas.png" />
+    <Content Include="Imagenes\perfil.png" />
     <Content Include="Imagenes\portadaApp.jpg" />
     <Content Include="Imagenes\rutasFlotas.png" />
     <Content Include="Imagenes\selectimg.png" />
@@ -2892,9 +2893,13 @@
     <Content Include="MasterEmpre\jsEmpre\TarifasRuta.js" />
     <Content Include="MasterEmpre\jsEmpre\TerminalParada.js" />
     <Content Include="MasterEmpre\jsEmpre\Usuarios.js" />
+    <Content Include="MasterEmpre\jsEmpre\VentaPasajes.js" />
+    <Content Include="MasterEmpre\jsEmpre\Viajes.js" />
     <Content Include="MasterEmpre\TarifasRuta.aspx" />
     <Content Include="MasterEmpre\TerminalParada.aspx" />
     <Content Include="MasterEmpre\Usuarios.aspx" />
+    <Content Include="MasterEmpre\VentaPasajes.aspx" />
+    <Content Include="MasterEmpre\Viajes.aspx" />
     <Content Include="UsuariosEmpresa.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -2975,6 +2980,20 @@
     </Compile>
     <Compile Include="MasterEmpre\Usuarios.aspx.designer.cs">
       <DependentUpon>Usuarios.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MasterEmpre\VentaPasajes.aspx.cs">
+      <DependentUpon>VentaPasajes.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterEmpre\VentaPasajes.aspx.designer.cs">
+      <DependentUpon>VentaPasajes.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MasterEmpre\Viajes.aspx.cs">
+      <DependentUpon>Viajes.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterEmpre\Viajes.aspx.designer.cs">
+      <DependentUpon>Viajes.aspx</DependentUpon>
     </Compile>
     <Compile Include="PageMaster.Master.cs">
       <DependentUpon>PageMaster.Master</DependentUpon>

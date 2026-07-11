@@ -48,5 +48,11 @@ namespace CapaPresentacion.MasterEmpre
             }
         }
 
+        [WebMethod]
+        public static Respuesta<List<ClienteDTO>> FiltroClientes(string busqueda)
+        {
+            return NCliente.GetInstance().FiltroClientes(busqueda);
+        }
+
     }
 }

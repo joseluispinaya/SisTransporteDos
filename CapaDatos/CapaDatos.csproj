@@ -46,7 +46,9 @@
     <Compile Include="DCiudadParada.cs" />
     <Compile Include="DCliente.cs" />
     <Compile Include="DEmpresa.cs" />
+    <Compile Include="DTarifas.cs" />
     <Compile Include="DUsuario.cs" />
+    <Compile Include="DViajes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

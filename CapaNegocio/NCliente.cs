@@ -35,5 +35,10 @@ namespace CapaNegocio
             return DCliente.GetInstance().GuardarOrEditClientes(objeto);
         }
 
+        public Respuesta<List<ClienteDTO>> FiltroClientes(string Busqueda)
+        {
+            return DCliente.GetInstance().FiltroClientes(Busqueda);
+        }
+
     }
 }

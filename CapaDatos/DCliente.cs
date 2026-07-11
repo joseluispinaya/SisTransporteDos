@@ -160,5 +160,56 @@ namespace CapaDatos
             return response;
         }
 
+        public Respuesta<List<ClienteDTO>> FiltroClientes(string Busqueda)
+        {
+            try
+            {
+                List<ClienteDTO> rptLista = new List<ClienteDTO>();
+
+                using (SqlConnection con = ConexionBD.GetInstance().ConexionDB())
+                {
+                    using (SqlCommand comando = new SqlCommand("usp_FiltroClientes", con))
+                    {
+                        comando.CommandType = CommandType.StoredProcedure;
+                        comando.Parameters.AddWithValue("@Busqueda", Busqueda);
+                        con.Open();
+
+                        using (SqlDataReader dr = comando.ExecuteReader())
+                        {
+                            while (dr.Read())
+                            {
+                                rptLista.Add(new ClienteDTO
+                                {
+                                    IdCliente = Convert.ToInt32(dr["IdCliente"]),
+                                    NroCi = dr["NroCi"].ToString(),
+                                    Nombres = dr["Nombres"].ToString(),
+                                    Apellidos = dr["Apellidos"].ToString(),
+
+                                    Genero = Convert.ToChar(dr["Genero"].ToString()),
+                                    Celular = dr["Celular"].ToString()
+                                });
+                            }
+                        }
+                    }
+                }
+                return new Respuesta<List<ClienteDTO>>()
+                {
+                    Estado = true,
+                    Data = rptLista,
+                    Mensaje = "Lista obtenidos correctamente"
+                };
+            }
+            catch (Exception ex)
+            {
+                // Maneja cualquier error inesperado
+                return new Respuesta<List<ClienteDTO>>()
+                {
+                    Estado = false,
+                    Mensaje = "Ocurrió un error: " + ex.Message,
+                    Data = null
+                };
+            }
+        }
+
     }
 }

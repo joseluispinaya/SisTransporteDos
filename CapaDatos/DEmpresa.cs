@@ -148,5 +148,56 @@ namespace CapaDatos
             }
         }
 
+        public Respuesta<EEmpresa> DatosEmpresa(int IdEmpresa)
+        {
+            try
+            {
+                EEmpresa obj = null;
+
+                using (SqlConnection con = ConexionBD.GetInstance().ConexionDB())
+                {
+                    using (SqlCommand comando = new SqlCommand("usp_ObtenerDatosEmpresa", con))
+                    {
+                        comando.CommandType = CommandType.StoredProcedure;
+                        comando.Parameters.AddWithValue("@IdEmpresa", IdEmpresa);
+
+                        con.Open();
+                        using (SqlDataReader dr = comando.ExecuteReader())
+                        {
+                            if (dr.Read())
+                            {
+                                obj = new EEmpresa
+                                {
+                                    IdEmpresa = Convert.ToInt32(dr["IdEmpresa"]),
+                                    RazonSocial = dr["RazonSocial"].ToString(),
+                                    NIT = dr["NIT"].ToString(),
+                                    Direccion = dr["Direccion"].ToString(),
+                                    Telefono = dr["Telefono"].ToString(),
+                                    LogoUrl = dr["LogoUrl"].ToString(),
+                                    Estado = Convert.ToBoolean(dr["Estado"])
+                                };
+                            }
+                        }
+                    }
+                }
+
+                return new Respuesta<EEmpresa>
+                {
+                    Estado = obj != null,
+                    Data = obj,
+                    Mensaje = obj != null ? "Informacion" : "No se encontro informacion."
+                };
+            }
+            catch (Exception)
+            {
+                return new Respuesta<EEmpresa>
+                {
+                    Estado = false,
+                    Mensaje = "Ocurrió un error en el servidor. Intente más tarde.",
+                    Data = null
+                };
+            }
+        }
+
     }
 }

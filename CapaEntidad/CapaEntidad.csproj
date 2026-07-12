@@ -42,8 +42,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DTOs\AsientosViajeDTO.cs" />
+    <Compile Include="DTOs\BoletoDTO.cs" />
+    <Compile Include="DTOs\BoletoImpresionDTO.cs" />
     <Compile Include="DTOs\BusesDTO.cs" />
     <Compile Include="DTOs\ClienteDTO.cs" />
+    <Compile Include="DTOs\PasajeroViajeDTO.cs" />
     <Compile Include="DTOs\TarifarioDTO.cs" />
     <Compile Include="DTOs\TarifasDTO.cs" />
     <Compile Include="DTOs\ViajesDTO.cs" />

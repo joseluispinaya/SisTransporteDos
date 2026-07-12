@@ -33,5 +33,10 @@ namespace CapaNegocio
         {
             return DEmpresa.GetInstance().ListaEmpresas();
         }
+
+        public Respuesta<EEmpresa> DatosEmpresa(int IdEmpresa)
+        {
+            return DEmpresa.GetInstance().DatosEmpresa(IdEmpresa);
+        }
     }
 }

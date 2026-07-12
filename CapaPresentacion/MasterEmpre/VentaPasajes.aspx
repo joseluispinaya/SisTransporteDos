@@ -1,6 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterEmpre/EmpresasMaster.Master" AutoEventWireup="true" CodeBehind="VentaPasajes.aspx.cs" Inherits="CapaPresentacion.MasterEmpre.VentaPasajes" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-    <link href="../assets/css/miestilo.css" rel="stylesheet" type="text/css" />
+    <link href="../assets/css/ventapasaje.css" rel="stylesheet" type="text/css" />
+    <%--<link href="../assets/css/miestilo.css" rel="stylesheet" type="text/css" />--%>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
     <div class="alert alert-primary d-flex flex-wrap justify-content-between align-items-center p-3 mb-4" role="alert">
@@ -156,42 +157,58 @@
     </div>
 
     <div id="ticket-termico" class="d-none d-print-block text-dark">
-        <div class="text-center mb-2">
-            <h4 class="fw-bolder mb-0 text-dark">TRANS FLOTA YUNGUEÑA</h4>
-            <p class="mb-0"><span class="fs-12 fw-bold">Sucursal : </span>Riberalta</p>
-            <span class="fs-12">Sistema de Boletos</span>
+        <div class="text-center mb-1">
+            <div class="text-center mb-2" id="tck_ContenedorLogo" style="display: none;">
+                <img src="../LogosEmp/logoEmp.jpg" id="tck_EmpresaLogo" alt="Logo" style="max-width: 130px; height: auto; object-fit: contain;" />
+            </div>
+            <h4 class="fw-bolder mb-0 text-dark text-uppercase" id="tck_EmpresaNombre">EMPRESA DE TRANSPORTE</h4>
+            <p class="mb-0 fs-12 text-dark" id="tck_EmpresaDetalle">NIT: -- | Tel: --</p>
+            <p class="mb-0 fs-11 text-muted text-wrap" id="tck_EmpresaDireccion" style="line-height: 1.2;">Dirección...</p>
+            <span class="fs-12 fw-bold d-block mt-1">Terminal de Salida: Riberalta</span>
         </div>
+
         <div class="border-top border-top-dashed border-dark my-2"></div>
+
         <div class="text-center mb-2">
             <h5 class="fw-bold mb-0 text-dark" id="tck_Tipo">BOLETO DE VIAJE</h5>
-            <span class="fs-14 fw-medium" id="tck_Comprobante">RIB-000000</span>
+            <span class="fs-14 fw-bolder" id="tck_Comprobante">RIB-000000</span>
         </div>
+
         <div class="border-top border-top-dashed border-dark my-2"></div>
+
         <div class="fs-13">
             <div class="d-flex justify-content-between"><span class="fw-bold">Fecha Salida:</span><span id="tck_Fecha">--/--/----</span></div>
             <div class="d-flex justify-content-between"><span class="fw-bold">Hora Salida:</span><span id="tck_Hora">--:--</span></div>
             <div class="d-flex justify-content-between"><span class="fw-bold">Tipo Bus:</span><span id="tck_Bus">----</span></div>
         </div>
+
         <div class="border-top border-top-dashed border-dark my-2"></div>
-        <div class="d-flex justify-content-center gap-2 fs-14 fw-bolder">
+
+        <div class="d-flex justify-content-center gap-2 fs-14 fw-bolder text-uppercase">
             <span id="tck_Origen">---</span><i class="ti ti-arrow-narrow-right fs-13"></i><span id="tck_Destino">---</span>
         </div>
+
         <div class="border-top border-top-dashed border-dark my-2"></div>
+
         <div class="fs-13">
             <div class="d-flex justify-content-between"><span class="fw-bold">Pasajero:</span><span id="tck_Pasajero">----</span></div>
             <div class="d-flex justify-content-between"><span class="fw-bold">Nro. CI:</span><span id="tck_CI">---</span></div>
         </div>
+
         <div class="border-top border-top-dashed border-dark my-2"></div>
+
         <div class="d-flex justify-content-between align-items-center mb-1">
             <span class="fs-16 fw-bold">ASIENTO:</span><span class="fs-16 fw-bolder" id="tck_Asiento">00</span>
         </div>
         <div class="d-flex justify-content-between align-items-center">
             <span class="fs-16 fw-bold">TOTAL:</span><span class="fs-16 fw-bolder">Bs. <span id="tck_Precio">0.00</span></span>
         </div>
+
         <div class="border-top border-top-dashed border-dark my-2"></div>
+
         <div class="text-center fs-11 mt-2">
-            <p class="mb-1">Presentarse 30 min. antes.</p>
-            <p class="mb-0 fw-bold">¡Buen viaje!</p>
+            <p class="mb-1">Presentarse 30 min. antes de la salida.</p>
+            <p class="mb-0 fw-bold">¡Gracias por su preferencia, buen viaje!</p>
         </div>
     </div>
 </asp:Content>

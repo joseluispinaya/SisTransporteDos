@@ -1,4 +1,6 @@
 ﻿
+let empresaGlobal = null;
+
 // Configuramos diferentes SweetAlert de forma global
 const ToastMaster = Swal.mixin({
     toast: true,
@@ -144,6 +146,8 @@ $(document).ready(function () {
 
     try {
         const usua = JSON.parse(usuario);
+
+        cargarDatosEmpresa();
         // mostrar la imagen y nombre del usuairo 
         $("#imgUserTra").attr("src", usua.FotoUrl || "/Imagenes/sinImagen.png");
         $("#lblRol").text(usua.NombreRol);
@@ -153,6 +157,30 @@ $(document).ready(function () {
         window.location.replace('../Login.aspx');
     }
 });
+
+function cargarDatosEmpresa() {
+
+    $.ajax({
+        url: "InicioEmpresa.aspx/DatosEmpresa",
+        type: "POST",
+        data: "{}",
+        contentType: 'application/json; charset=utf-8',
+        dataType: "json",
+        success: function (response) {
+
+            if (response.d.Estado) {
+                empresaGlobal = response.d.Data;
+
+            } else {
+                empresaGlobal = null;
+                //AlertaTimerTipo("Atención", response.d.Mensaje, "warning");
+            }
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            console.log(xhr.status + " \n" + xhr.responseText, "\n" + thrownError);
+        }
+    });
+}
 
 $('#salirsis').on('click', function (e) {
     e.preventDefault();

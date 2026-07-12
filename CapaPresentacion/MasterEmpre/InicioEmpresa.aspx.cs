@@ -1,4 +1,6 @@
-﻿using CapaEntidad.Responses;
+﻿using CapaEntidad.Entidades;
+using CapaEntidad.Responses;
+using CapaNegocio;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +16,17 @@ namespace CapaPresentacion.MasterEmpre
         protected void Page_Load(object sender, EventArgs e)
         {
 
+        }
+
+        [WebMethod(EnableSession = true)]
+        public static Respuesta<EEmpresa> DatosEmpresa()
+        {
+            var usuario = SesionHelper.UsuarioLogueado;
+
+            if (usuario == null)
+                return new Respuesta<EEmpresa> { Estado = false, Mensaje = "Su sesión ha expirado. Recargue la página." };
+
+            return NEmpresa.GetInstance().DatosEmpresa(usuario.IdEmpresa);
         }
 
         [WebMethod(EnableSession = true)] // <--- OBLIGATORIO para poder borrarla

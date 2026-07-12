@@ -1,0 +1,168 @@
+﻿/* Estilos personalizados para el flujo de ventas */
+.viaje-item {
+    cursor: pointer;
+    transition: all 0.2s;
+    border-left: 4px solid transparent;
+}
+
+    .viaje-item:hover {
+        background-color: var(--bs-secondary-bg-subtle);
+        border-left-color: var(--bs-info);
+    }
+
+    .viaje-item.active {
+        background-color: var(--bs-info-bg-subtle);
+        border-left-color: var(--bs-info);
+        /*box-shadow: inset 0 0 0 1px #0dcaf0;*/
+    }
+
+/* Segmented Control para Venta/Reserva */
+.btn-group-toggle .btn {
+    flex: 1;
+}
+
+    .btn-group-toggle .btn.active {
+        background-color: #3b82f6;
+        color: white;
+        border-color: #3b82f6;
+    }
+
+
+/* Estilos personalizados para el diseño de la flota y asientos */
+.bus-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 10px; /* Espacio para la barra de scroll */
+}
+
+/* El chasis de la flota (Ahora Horizontal) */
+.bus-container {
+    border: 4px solid var(--bs-border-color);
+    border-radius: 50px 10px 10px 50px; /* Punta redondeada a la Izquierda */
+    padding: 15px;
+    display: inline-flex; /* Crece horizontalmente según el contenido */
+    flex-direction: row;
+    background-color: var(--bs-body-bg);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    min-width: min-content;
+}
+
+/* Área del Chofer (A la izquierda) */
+.driver-area {
+    border-right: 2px dashed var(--bs-border-color);
+    padding-right: 15px;
+    margin-right: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Volante arriba, puerta abajo */
+    align-items: center;
+    min-width: 50px;
+}
+
+/* Contenedor de todas las filas */
+.seats-area {
+    display: flex;
+    flex-direction: row; /* Las filas se ponen una al lado de la otra */
+    gap: 8px; /* ¡SEPARACIÓN REDUCIDA ENTRE FILAS! */
+}
+
+/* Una "Fila" de asientos (que visualmente ahora es una columna vertical) */
+.seat-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* El Asiento (¡MÁS PEQUEÑO!) */
+.seat {
+    width: 32px;
+    height: 32px;
+    font-size: 0.75rem; /* Letra más pequeña */
+    border: 2px solid var(--bs-primary);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    cursor: pointer;
+    color: var(--bs-primary);
+    background-color: transparent;
+    transition: all 0.2s ease-in-out;
+    user-select: none;
+}
+
+    .seat:hover, .seat.selected {
+        background-color: var(--bs-primary);
+        color: #fff;
+        transform: scale(1.1);
+    }
+
+/* El espacio del pasillo central (Ahora es una separación vertical) */
+.seat-aisle {
+    height: 20px;
+}
+
+.steering-wheel {
+    font-size: 24px;
+    color: var(--bs-secondary);
+    margin-top: 5px;
+}
+
+/* Estados de los Asientossss */
+.seat.asiento-reservado {
+    background-color: var(--bs-warning);
+    color: #fff;
+    border-color: var(--bs-warning);
+    cursor: not-allowed; /* Cambia el cursor a prohibido */
+}
+
+.seat.asiento-vendido {
+    background-color: var(--bs-danger);
+    color: #fff;
+    border-color: var(--bs-danger);
+    cursor: not-allowed;
+}
+
+    /* Evitamos el efecto hover en los ocupados */
+    .seat.asiento-reservado:hover,
+    .seat.asiento-vendido:hover {
+        transform: none;
+    }
+
+/* DISEÑO DEL TICKET (Oculto por defecto en la pantalla) */
+@media print {
+    /* 1. Hacemos "transparente" todo el contenido, sin destruir el <form> de ASP.NET */
+    body * {
+        visibility: hidden;
+    }
+
+    /* 2. Hacemos visible ÚNICAMENTE el ticket y todo lo que esté adentro */
+    #ticket-termico, #ticket-termico * {
+        visibility: visible;
+    }
+
+    /* 3. Posicionamos el ticket en la esquina superior izquierda para la impresora */
+    #ticket-termico {
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 80mm !important;
+        padding: 5mm !important;
+        margin: 0 !important;
+        font-family: 'Courier New', Courier, monospace !important;
+        -webkit-print-color-adjust: exact; /* Fuerza a Chrome/Edge a imprimir el logo con colores/contrastes nítidos */
+        print-color-adjust: exact;
+    }
+
+    /* 4. Aseguramos que los bordes punteados se impriman bien en blanco y negro */
+    .border-top-dashed {
+        border-top: 1.5px dashed #000 !important;
+        height: 0px;
+    }
+
+    /* 5. Le decimos a Chrome/Edge el tamaño exacto del papel */
+    @page {
+        size: 80mm auto;
+        margin: 0;
+    }
+}

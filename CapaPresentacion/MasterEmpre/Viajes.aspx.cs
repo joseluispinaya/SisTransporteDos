@@ -23,6 +23,29 @@ namespace CapaPresentacion.MasterEmpre
         [WebMethod(EnableSession = true)]
         public static Respuesta<List<ViajesDTO>> ListaViajesProgramadas()
         {
+            // 1. Obtenemos el usuario con una sola línea limpia
+            var usuario = SesionHelper.UsuarioLogueado;
+
+            // 2. Validamos si es null (Sesión expirada)
+            if (usuario == null)
+            {
+                return new Respuesta<List<ViajesDTO>> { Estado = false, Mensaje = "Su sesión ha expirado. Recargue la página." };
+            }
+
+            try
+            {
+                // 3. Usamos el IdEmpresa directamente del objeto
+                return NViajes.GetInstance().ListaViajesProgramadas(usuario.IdEmpresa);
+            }
+            catch (Exception)
+            {
+                return new Respuesta<List<ViajesDTO>> { Estado = false, Mensaje = "Ocurrió un error interno en el servidor. Intente nuevamente" };
+            }
+        }
+
+        [WebMethod(EnableSession = true)]
+        public static Respuesta<List<ViajesDTO>> ListaViajesProgramadasOriginal()
+        {
             // 1. Validar Sesión
             if (HttpContext.Current.Session["UsuarioLogueado"] == null)
             {

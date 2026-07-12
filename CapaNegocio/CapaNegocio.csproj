@@ -47,6 +47,7 @@
     <Compile Include="NEmpresa.cs" />
     <Compile Include="NTarifas.cs" />
     <Compile Include="NUsuarios.cs" />
+    <Compile Include="NVentaPasajes.cs" />
     <Compile Include="NViajes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

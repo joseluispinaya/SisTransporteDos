@@ -78,5 +78,50 @@ namespace CapaPresentacion.MasterEmpre
             }
         }
 
+        [WebMethod(EnableSession = true)]
+        public static Respuesta<int> RegistrarPasaje(BoletoDTO objeto)
+        {
+            // 1. Validar Sesión
+            if (HttpContext.Current.Session["UsuarioLogueado"] == null)
+            {
+                return new Respuesta<int> { Estado = false, Valor = "SIN_SESION", Mensaje = "Su sesión ha expirado. Recargue la página.", Data = 0 };
+            }
+
+            try
+            {
+                EUsuarios usuari = (EUsuarios)HttpContext.Current.Session["UsuarioLogueado"];
+                int idOrigen = 1;
+                objeto.IdEmpresa = usuari.IdEmpresa;
+
+                return NVentaPasajes.GetInstance().RegistrarBoleto(objeto, idOrigen);
+            }
+            catch (Exception ex)
+            {
+                return new Respuesta<int> { Estado = false, Mensaje = ex.Message, Data = 0 };
+            }
+        }
+
+        [WebMethod(EnableSession = true)]
+        public static Respuesta<BoletoImpresionDTO> ObtenerDetalleBoletoImpresion(int IdBoleto)
+        {
+            var usuario = SesionHelper.UsuarioLogueado;
+
+            if (usuario == null)
+                return new Respuesta<BoletoImpresionDTO> { Estado = false, Mensaje = "Su sesión ha expirado. Recargue la página." };
+
+            return NVentaPasajes.GetInstance().ObtenerDetalleBoletoImpresion(IdBoleto, usuario.IdEmpresa);
+        }
+
+        [WebMethod(EnableSession = true)]
+        public static Respuesta<BoletoImpresionDTO> ObtenerDetalleBoletoImpresionOrigi(int IdBoleto)
+        {
+            if (HttpContext.Current.Session["UsuarioLogueado"] == null)
+                return new Respuesta<BoletoImpresionDTO> { Estado = false, Mensaje = "Sesión expirada" };
+
+            EUsuarios usuari = (EUsuarios)HttpContext.Current.Session["UsuarioLogueado"];
+
+            return NVentaPasajes.GetInstance().ObtenerDetalleBoletoImpresion(IdBoleto, usuari.IdEmpresa);
+        }
+
     }
 }

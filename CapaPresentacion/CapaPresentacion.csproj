@@ -93,6 +93,7 @@
     <Content Include="assets\css\inicioze.css" />
     <Content Include="assets\css\miestilo.css" />
     <Content Include="assets\css\vendor.min.css" />
+    <Content Include="assets\css\ventapasaje.css" />
     <Content Include="assets\images\brands\amazon.svg" />
     <Content Include="assets\images\brands\aws.svg" />
     <Content Include="assets\images\brands\bitbucket.svg" />
@@ -2886,15 +2887,21 @@
     <Content Include="LogosEmp\logoEmp.jpg" />
     <Content Include="MasterEmpre\Clientes.aspx" />
     <Content Include="MasterEmpre\Conductores.aspx" />
+    <Content Include="MasterEmpre\ConsultasPasajes.aspx" />
     <Content Include="MasterEmpre\InicioEmpresa.aspx" />
     <Content Include="MasterEmpre\jsEmpre\Clientes.js" />
     <Content Include="MasterEmpre\jsEmpre\Conductores.js" />
+    <Content Include="MasterEmpre\jsEmpre\ConsultasPasajes.js" />
     <Content Include="MasterEmpre\jsEmpre\Masterpa.js" />
+    <Content Include="MasterEmpre\jsEmpre\OpcionesViaje.js" />
+    <Content Include="MasterEmpre\jsEmpre\RecepcionEnco.js" />
     <Content Include="MasterEmpre\jsEmpre\TarifasRuta.js" />
     <Content Include="MasterEmpre\jsEmpre\TerminalParada.js" />
     <Content Include="MasterEmpre\jsEmpre\Usuarios.js" />
     <Content Include="MasterEmpre\jsEmpre\VentaPasajes.js" />
     <Content Include="MasterEmpre\jsEmpre\Viajes.js" />
+    <Content Include="MasterEmpre\OpcionesViaje.aspx" />
+    <Content Include="MasterEmpre\RecepcionesEnco.aspx" />
     <Content Include="MasterEmpre\TarifasRuta.aspx" />
     <Content Include="MasterEmpre\TerminalParada.aspx" />
     <Content Include="MasterEmpre\Usuarios.aspx" />
@@ -2946,6 +2953,13 @@
     <Compile Include="MasterEmpre\Conductores.aspx.designer.cs">
       <DependentUpon>Conductores.aspx</DependentUpon>
     </Compile>
+    <Compile Include="MasterEmpre\ConsultasPasajes.aspx.cs">
+      <DependentUpon>ConsultasPasajes.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterEmpre\ConsultasPasajes.aspx.designer.cs">
+      <DependentUpon>ConsultasPasajes.aspx</DependentUpon>
+    </Compile>
     <Compile Include="MasterEmpre\EmpresasMaster.Master.cs">
       <DependentUpon>EmpresasMaster.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2959,6 +2973,20 @@
     </Compile>
     <Compile Include="MasterEmpre\InicioEmpresa.aspx.designer.cs">
       <DependentUpon>InicioEmpresa.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MasterEmpre\OpcionesViaje.aspx.cs">
+      <DependentUpon>OpcionesViaje.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterEmpre\OpcionesViaje.aspx.designer.cs">
+      <DependentUpon>OpcionesViaje.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MasterEmpre\RecepcionesEnco.aspx.cs">
+      <DependentUpon>RecepcionesEnco.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterEmpre\RecepcionesEnco.aspx.designer.cs">
+      <DependentUpon>RecepcionesEnco.aspx</DependentUpon>
     </Compile>
     <Compile Include="MasterEmpre\TarifasRuta.aspx.cs">
       <DependentUpon>TarifasRuta.aspx</DependentUpon>
@@ -3003,6 +3031,7 @@
       <DependentUpon>PageMaster.Master</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SesionHelper.cs" />
     <Compile Include="UsuariosEmpresa.aspx.cs">
       <DependentUpon>UsuariosEmpresa.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

@@ -48,6 +48,7 @@
     <Compile Include="DEmpresa.cs" />
     <Compile Include="DTarifas.cs" />
     <Compile Include="DUsuario.cs" />
+    <Compile Include="DVentaPasajes.cs" />
     <Compile Include="DViajes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

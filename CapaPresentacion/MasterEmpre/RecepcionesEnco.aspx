@@ -105,7 +105,23 @@
 
                     <div class="row align-items-center bg-light border border-dashed rounded p-2 shadow-sm">
                         
-                        <div class="col-md-6 mb-3 mb-md-0">
+                        <div class="col-md-3 mb-3 mb-md-0 border-end border-dashed">
+                            <label class="form-label text-muted fs-12 fw-bold text-uppercase mb-1">Tipo de Tarifa</label>
+                            <div class="form-check custom-radio mb-1">
+                                <input class="form-check-input" type="radio" name="radioTipoTarifa" id="tarifaPeso" value="peso" checked>
+                                <label class="form-check-label fw-bold text-dark" for="tarifaPeso">
+                                    <i class="ti ti-scale me-1"></i>Por Peso
+                                </label>
+                            </div>
+                            <div class="form-check custom-radio">
+                                <input class="form-check-input" type="radio" name="radioTipoTarifa" id="tarifaManual" value="manual">
+                                <label class="form-check-label fw-bold text-primary" for="tarifaManual">
+                                    <i class="ti ti-mail me-1"></i>Manual
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 mb-3 mb-md-0">
                             <label class="form-label text-muted fs-12 fw-bold text-uppercase mb-1">Estado del Pago</label>
                             <div class="form-check custom-radio mb-1">
                                 <input class="form-check-input" type="radio" name="radioEstadoPago" id="pagoPagado" value="1" checked>
@@ -122,31 +138,14 @@
                             </div>
                         </div>
 
-                        <%--<div class="col-md-5 mb-3 mb-md-0">
-                            <label class="form-label text-muted fs-12 fw-bold text-uppercase mb-2">Estado del Pago</label>
-                            <div class="d-flex gap-3">
-                                <div class="form-check custom-radio">
-                                    <input class="form-check-input" type="radio" name="radioEstadoPago" id="pagoPagado" value="1" checked>
-                                    <label class="form-check-label fw-bold text-success" for="pagoPagado">
-                                        <i class="ti ti-cash me-1"></i>Pagado
-                                    </label>
-                                </div>
-                                <div class="form-check custom-radio">
-                                    <input class="form-check-input" type="radio" name="radioEstadoPago" id="pagoPorCobrar" value="2">
-                                    <label class="form-check-label fw-bold text-warning" for="pagoPorCobrar">
-                                        <i class="ti ti-truck-delivery me-1"></i>Por Cobrar
-                                    </label>
-                                </div>
-                            </div>
-                        </div>--%>
 
                         <div class="col-md-3 mb-3 mb-md-0">
-                            <label class="form-label text-muted fs-12 fw-bold text-uppercase mb-1">Monto Calculado</label>
+                            <label class="form-label text-muted fs-12 fw-bold text-uppercase mb-1" id="lblTituloMonto">Monto Calculado</label>
                             <div class="input-group flex-nowrap">
                                 <span class="input-group-text bg-success text-white border-success fw-bold">Bs.</span>
-                                <input type="text" class="form-control fw-bold fs-18 text-success border-success" id="txtPrecioTotal" readonly value="0.00">
+                                <input type="number" step="0.50" min="0" class="form-control fw-bold fs-18 text-success border-success" id="txtPrecioTotal" readonly value="0.00">
                             </div>
-                            <div class="form-text fs-11 mt-1 text-muted fw-medium">
+                            <div class="form-text fs-11 mt-1 text-muted fw-medium" id="lblInfoTarifa">
                                 <i class="ti ti-info-circle me-1"></i>Tarifa Bs. <span id="lblPrecioKilo">0.00</span> por Kg.
                             </div>
                         </div>

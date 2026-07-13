@@ -2888,10 +2888,12 @@
     <Content Include="LogosEmp\logoEmp.jpg" />
     <Content Include="MasterEmpre\Clientes.aspx" />
     <Content Include="MasterEmpre\Conductores.aspx" />
+    <Content Include="MasterEmpre\ConsultasEncomi.aspx" />
     <Content Include="MasterEmpre\ConsultasPasajes.aspx" />
     <Content Include="MasterEmpre\InicioEmpresa.aspx" />
     <Content Include="MasterEmpre\jsEmpre\Clientes.js" />
     <Content Include="MasterEmpre\jsEmpre\Conductores.js" />
+    <Content Include="MasterEmpre\jsEmpre\ConsultasEncomi.js" />
     <Content Include="MasterEmpre\jsEmpre\ConsultasPasajes.js" />
     <Content Include="MasterEmpre\jsEmpre\Masterpa.js" />
     <Content Include="MasterEmpre\jsEmpre\OpcionesViaje.js" />
@@ -2953,6 +2955,13 @@
     </Compile>
     <Compile Include="MasterEmpre\Conductores.aspx.designer.cs">
       <DependentUpon>Conductores.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MasterEmpre\ConsultasEncomi.aspx.cs">
+      <DependentUpon>ConsultasEncomi.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterEmpre\ConsultasEncomi.aspx.designer.cs">
+      <DependentUpon>ConsultasEncomi.aspx</DependentUpon>
     </Compile>
     <Compile Include="MasterEmpre\ConsultasPasajes.aspx.cs">
       <DependentUpon>ConsultasPasajes.aspx</DependentUpon>

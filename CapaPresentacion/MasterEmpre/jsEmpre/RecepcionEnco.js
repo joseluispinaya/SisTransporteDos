@@ -9,8 +9,30 @@ $(document).ready(function () {
     cargarViajesParaEncomiendas();
     cargarBuscadoresClientes(); // Inicializa Remitente y Destinatario
 
-    // Evento dinámico: Calcula el total cada vez que el usuario escribe el peso
     $("#txtPeso").on("input", calcularMontoTotal);
+
+    // NUEVO: Evento para cambiar entre cálculo por peso o monto manual
+    $('input[name="radioTipoTarifa"]').on('change', function () {
+        let tipo = $(this).val();
+
+        if (tipo === 'manual') {
+            // Modo Sobre/Manual: Bloquear peso y habilitar cobro
+            $("#txtPeso").val("").prop("disabled", true);
+            $("#txtPrecioTotal").prop("readonly", false).val("").focus();
+
+            $("#lblTituloMonto").text("Monto Manual");
+            $("#lblInfoTarifa").addClass("opacity-50"); // Opaca el texto de la tarifa
+        } else {
+            // Modo Balanza/Peso: Habilitar peso y bloquear cobro
+            $("#txtPeso").prop("disabled", false);
+            $("#txtPrecioTotal").prop("readonly", true);
+
+            $("#lblTituloMonto").text("Monto Calculado");
+            $("#lblInfoTarifa").removeClass("opacity-50");
+
+            calcularMontoTotal(); // Forzar recálculo por si había un peso escrito
+        }
+    });
 });
 
 // ==========================================
@@ -88,6 +110,8 @@ function seleccionarViaje(elemento, idViaje, idRuta, idTipoBus, nombreTitulo) {
     $("#txtPeso").val("");
     $("#lblPrecioKilo").text("0.00");
     $("#txtPrecioTotal").val("0.00");
+
+    $("#tarifaPeso").prop("checked", true).trigger("change");
     $("#pagoPagado").prop("checked", true); // Por defecto pagado
 
     // Actualizar Título
@@ -204,20 +228,30 @@ $("#cboDestino").on("change", function () {
     };
 
     $.ajax({
-        url: "VentaPasajes.aspx/ConsultarTarifario", // Usamos la misma función de tarifarios
+        url: "VentaPasajes.aspx/ConsultarTarifario",
         type: "POST",
         data: JSON.stringify(request),
         contentType: 'application/json; charset=utf-8',
         dataType: "json",
         success: function (response) {
             if (response.d.Estado && response.d.Data != null) {
-                // ATENCIÓN: Aquí sacamos PrecioKiloEncomienda, NO PrecioPasaje
                 let precioKilo = response.d.Data.PrecioKiloEncomienda;
                 $("#lblPrecioKilo").text(precioKilo.toFixed(2));
-                calcularMontoTotal();
+
+                // CONTROL INTELIGENTE: 
+                // Solo disparamos el recálculo automático si el usuario está usando la balanza (Por Peso)
+                let tipoTarifa = $('input[name="radioTipoTarifa"]:checked').val();
+                if (tipoTarifa === 'peso') {
+                    calcularMontoTotal();
+                }
+
             } else {
                 $("#lblPrecioKilo").text("0.00");
-                calcularMontoTotal();
+
+                let tipoTarifa = $('input[name="radioTipoTarifa"]:checked').val();
+                if (tipoTarifa === 'peso') {
+                    calcularMontoTotal();
+                }
 
                 if (response.d.Valor === "MISMO_DESTINO") {
                     $("#cboDestino").val("");
@@ -235,7 +269,9 @@ $("#cboDestino").on("change", function () {
 
 // FUNCIÓN DE CALCULADORA EN TIEMPO REAL
 function calcularMontoTotal() {
-    // Reemplazamos coma por punto por si usan el teclado numérico latino
+    let tipoTarifa = $('input[name="radioTipoTarifa"]:checked').val();
+    if (tipoTarifa === 'manual') return; // Escudo: Si es manual, no calculamos nada
+
     let pesoStr = $("#txtPeso").val().trim().replace(',', '.');
     let peso = parseFloat(pesoStr) || 0;
 
@@ -243,8 +279,6 @@ function calcularMontoTotal() {
     let precioKilo = parseFloat(precioKiloStr) || 0;
 
     let totalCalculado = peso * precioKilo;
-
-    // Mostramos el total
     $("#txtPrecioTotal").val(totalCalculado.toFixed(2));
 }
 
@@ -263,12 +297,19 @@ $("#btnRegistrarEncomienda").on("click", function () {
     let detalleCarga = $("#txtDetalle").val().trim();
     let estadoPago = $('input[name="radioEstadoPago"]:checked').val(); // 1 o 2
 
-    // Parseo seguro de números (por si el usuario usa comas en vez de puntos)
-    let pesoStr = $("#txtPeso").val().trim().replace(',', '.');
-    let montoStr = $("#txtPrecioTotal").val().trim().replace(',', '.');
+    // NUEVO: Saber qué tarifa eligió
+    let tipoTarifa = $('input[name="radioTipoTarifa"]:checked').val();
 
-    let pesoKg = parseFloat(pesoStr);
+    // Capturar y convertir valores
+    let montoStr = $("#txtPrecioTotal").val().trim().replace(',', '.');
     let montoCobrado = parseFloat(montoStr);
+
+    // LÓGICA INTELIGENTE DE PESO: Si es manual, el peso es 0. Si no, leemos el input.
+    let pesoKg = 0;
+    if (tipoTarifa === 'peso') {
+        let pesoStr = $("#txtPeso").val().trim().replace(',', '.');
+        pesoKg = parseFloat(pesoStr);
+    }
 
     // 3. Validaciones de Reglas de Negocio
     if (!idRemitente) {
@@ -300,14 +341,16 @@ $("#btnRegistrarEncomienda").on("click", function () {
         return;
     }
 
-    if (isNaN(pesoKg) || pesoKg <= 0) {
-        ToastMaster.fire({ icon: 'warning', title: 'Ingrese un peso válido mayor a 0 Kg.' });
+    // NUEVA VALIDACIÓN: Exigir peso solo si el radio está en "peso"
+    if (tipoTarifa === 'peso' && (isNaN(pesoKg) || pesoKg <= 0)) {
+        ToastMaster.fire({ icon: 'warning', title: 'Ingrese un peso válido en la balanza.' });
         $("#txtPeso").focus();
         return;
     }
 
-    if (isNaN(montoCobrado) || montoCobrado < 0) {
-        ToastMaster.fire({ icon: 'error', title: 'Error en el cálculo del monto. Verifique el peso y el destino.' });
+    if (isNaN(montoCobrado) || montoCobrado <= 0) {
+        ToastMaster.fire({ icon: 'warning', title: 'El monto a cobrar debe ser mayor a 0.' });
+        //$("#txtPrecioTotal").focus();
         return;
     }
 
@@ -372,8 +415,12 @@ $("#btnRegistrarEncomienda").on("click", function () {
                         $("#txtPeso").val("");
                         $("#txtPrecioTotal").val("0.00");
 
+                        // NUEVO: Reseteamos los Radio Buttons a su estado por defecto
+                        $("#tarifaPeso").prop("checked", true).trigger("change"); // Vuelve a "Por Peso" y desbloquea el input automáticamente
+                        $("#pagoPagado").prop("checked", true); // Vuelve a "Pagado"
+
                         // Opcional: enfocar de nuevo al remitente por si el cliente tiene otro paquete
-                        $("#cboRemitente").select2('open');
+                        //$("#cboRemitente").select2('open');
 
                         // 6. IMPRIMIR TICKET DE ENCOMIENDA
                         imprimirTicketEncomienda(idNuevaEncomienda); 

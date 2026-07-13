@@ -204,6 +204,61 @@
                     </li>
 
                     <li class="side-nav-item">
+                        <a data-bs-toggle="collapse" href="#sidebarMultiLevel" aria-expanded="false" aria-controls="sidebarMultiLevel"
+                            class="side-nav-link">
+                            <span class="menu-icon"><i class="ti ti-box-multiple-3"></i></span>
+                            <span class="menu-text">Encomiendas </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="sidebarMultiLevel">
+                            <ul class="sub-menu">
+                                <li class="side-nav-item">
+                                    <a data-bs-toggle="collapse" href="#sidebarSecondLevel" aria-expanded="false"
+                                        aria-controls="sidebarSecondLevel" class="side-nav-link">
+                                        <span class="menu-text">Recepcion </span>
+                                        <span class="menu-arrow"></span>
+                                    </a>
+                                    <div class="collapse" id="sidebarSecondLevel">
+                                        <ul class="sub-menu">
+                                            <li class="side-nav-item">
+                                                <a href="RecepcionesEnco.aspx" class="side-nav-link">
+                                                    <span class="menu-text">Registros</span>
+                                                </a>
+                                            </li>
+                                            <li class="side-nav-item">
+                                                <a href="ConsultasEncomi.aspx" class="side-nav-link">
+                                                    <span class="menu-text">Consultas</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="side-nav-item">
+                                    <a data-bs-toggle="collapse" href="#sidebarThirdLevel" aria-expanded="false"
+                                        aria-controls="sidebarThirdLevel" class="side-nav-link">
+                                        <span class="menu-text">Entregas </span>
+                                        <span class="menu-arrow"></span>
+                                    </a>
+                                    <div class="collapse" id="sidebarThirdLevel">
+                                        <ul class="sub-menu">
+                                            <li class="side-nav-item">
+                                                <a href="javascript: void(0);" class="side-nav-link">
+                                                    <span class="menu-text">Registros</span>
+                                                </a>
+                                            </li>
+                                            <li class="side-nav-item">
+                                                <a href="javascript: void(0);" class="side-nav-link">
+                                                    <span class="menu-text">Consultas</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="side-nav-item">
                         <a data-bs-toggle="collapse" href="#sidebarIcons" aria-expanded="false" aria-controls="sidebarIcons" class="side-nav-link">
                             <span class="menu-icon"><i class="ti ti-ticket"></i></span>
                             <span class="menu-text"> Encomiendas </span>

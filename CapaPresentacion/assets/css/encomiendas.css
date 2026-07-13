@@ -1,0 +1,71 @@
+﻿.select2-container .select2-selection--single {
+    height: 39px !important;
+    padding: 0.35rem 0.5rem;
+    border: 1px solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+    background-color: var(--bs-light);
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 1.6 !important;
+    padding-left: 0px !important;
+    color: var(--bs-body-color);
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 37px !important;
+}
+
+/* Efecto Neobrutalista para la Lista de Viajes */
+.viaje-item {
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    border-left: 4px solid transparent !important;
+}
+
+    .viaje-item:hover {
+        background-color: var(--bs-secondary-bg-subtle);
+        border-left-color: var(--bs-primary) !important;
+    }
+
+    .viaje-item.active {
+        background-color: var(--bs-primary-bg-subtle);
+        border-left-color: var(--bs-primary) !important;
+    }
+
+@media print {
+    /* 1. Hacemos "transparente" todo el contenido, sin destruir el <form> de ASP.NET */
+    body * {
+        visibility: hidden;
+    }
+
+    /* 2. Hacemos visible ÚNICAMENTE el ticket y todo lo que esté adentro */
+    #ticket-termico, #ticket-termico * {
+        visibility: visible;
+    }
+
+    /* 3. Posicionamos el ticket en la esquina superior izquierda para la impresora */
+    #ticket-termico {
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 80mm !important;
+        padding: 5mm !important;
+        margin: 0 !important;
+        font-family: 'Courier New', Courier, monospace !important;
+        -webkit-print-color-adjust: exact; /* Fuerza a Chrome/Edge a imprimir el logo con colores/contrastes nítidos */
+        print-color-adjust: exact;
+    }
+
+    /* 4. Aseguramos que los bordes punteados se impriman bien en blanco y negro */
+    .border-top-dashed {
+        border-top: 1.5px dashed #000 !important;
+        height: 0px;
+    }
+
+    /* 5. Le decimos a Chrome/Edge el tamaño exacto del papel */
+    @page {
+        size: 80mm auto;
+        margin: 0;
+    }
+}

@@ -46,6 +46,7 @@
     <Compile Include="DCiudadParada.cs" />
     <Compile Include="DCliente.cs" />
     <Compile Include="DEmpresa.cs" />
+    <Compile Include="DEncomienda.cs" />
     <Compile Include="DTarifas.cs" />
     <Compile Include="DUsuario.cs" />
     <Compile Include="DVentaPasajes.cs" />

@@ -88,6 +88,7 @@
     <Content Include="assets\css\app.css" />
     <Content Include="assets\css\app.min.css" />
     <Content Include="assets\css\default.css" />
+    <Content Include="assets\css\encomiendas.css" />
     <Content Include="assets\css\icons.css" />
     <Content Include="assets\css\icons.min.css" />
     <Content Include="assets\css\inicioze.css" />

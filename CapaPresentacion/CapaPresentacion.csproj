@@ -2870,6 +2870,7 @@
     <Content Include="Default.aspx" />
     <Content Include="EmpresasTrans.aspx" />
     <Content Include="Imagenes\9ec8b515-ef33-4c60-9629-9390b21e1cd5.jpg" />
+    <Content Include="Imagenes\cambus.png" />
     <Content Include="Imagenes\imglogin.png" />
     <Content Include="Imagenes\imgselect.png" />
     <Content Include="Imagenes\logoflotas.png" />

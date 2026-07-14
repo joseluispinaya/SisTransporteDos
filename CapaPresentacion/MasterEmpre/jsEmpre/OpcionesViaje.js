@@ -4,7 +4,125 @@ const { jsPDF } = window.jspdf;
 
 $(document).ready(function () {
     cargarRutass();
+
+    // Inicializar Select2 para Bus
+    $("#cboBus").select2({
+        dropdownParent: $('#mdCambioBus'),
+        width: '100%',
+        placeholder: "-- Seleccione un Bus --",
+        //allowClear: true,
+        templateResult: formatoResultadosBus,
+        templateSelection: formatoSeleccionBus
+    });
+
+    cargarBuses();
 });
+
+function formatoResultadosBus(estado) {
+    // Si no tiene id (es el placeholder vacío), devolvemos el texto normal
+    if (!estado.id) {
+        return estado.text;
+    }
+
+    // Extraemos la información que guardamos en los atributos data-*
+    let placa = estado.element.dataset.placa;
+    let tipo = estado.element.dataset.tipo;
+    let asientos = estado.element.dataset.asientos;
+    let chofer = estado.element.dataset.chofer;
+
+    // Construimos un diseño HTML usando las clases de Bootstrap y los íconos de tu template
+    let $html = $(`
+        <div class="d-flex flex-column py-1 border-bottom border-light">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="fw-bold text-success"><i class="ti ti-bus me-1 text-muted"></i> Placa: ${placa}</span>
+                <span class="badge bg-primary-subtle text-primary fs-11">${tipo}</span>
+            </div>
+            <span class="text-muted fs-12 mb-1"><i class="ti ti-steering-wheel me-1"></i> Chofer: ${chofer}</span>
+            <span class="text-success fw-semibold fs-12"><i class="ti ti-users me-1"></i> Capacidad: ${asientos} Asientos</span>
+        </div>
+    `);
+
+    return $html;
+}
+
+function formatoSeleccionBus(estado) {
+    // Si no tiene id (es el placeholder vacío), devolvemos el texto normal
+    if (!estado.id) {
+        return estado.text;
+    }
+
+    let placa = estado.element.dataset.placa;
+    let tipo = estado.element.dataset.tipo;
+    let chofer = estado.element.dataset.chofer;
+
+    // Validación rápida por si la data viene vacía o nula
+    let nombreChofer = chofer ? chofer : "Chofer no asignado";
+
+    // Cómo se verá el texto una vez que el usuario seleccionó una opción
+    return $(`
+        <span>
+            <i class="ti ti-bus me-1 text-primary"></i> <b class="text-dark">${placa}</b> 
+            <span class="text-muted ms-1 fs-13">(${tipo})</span>
+            
+            <span class="text-muted mx-2">|</span>
+            
+            <span class="fs-13 text-secondary">
+                <i class="ti ti-steering-wheel me-1"></i>${nombreChofer}
+            </span>
+        </span>
+    `);
+}
+
+$("#cboBus").on("change", function () {
+    let $selected = $(this).find(':selected');
+
+    console.log($selected);
+    let chofer = $selected.data("chofer");
+
+    $("#lblNombreChofer").text(chofer);
+    //$("#lblNroAsien").text("Esperando...");
+    //$("#lblNroplaca").text("Esperando...");
+
+});
+
+function cargarBuses() {
+    $("#cboBus").html('<option value=""></option>').trigger('change');
+
+    $.ajax({
+        url: "Conductores.aspx/ListaBuses",
+        type: "POST",
+        data: "{}",
+        contentType: 'application/json; charset=utf-8',
+        dataType: "json",
+        success: function (response) {
+            if (response.d.Estado) {
+
+                let opcionesHTML = '<option value=""></option>';
+
+                $.each(response.d.Data, function (i, row) {
+                    // AQUÍ ESTÁ LA MAGIA: Guardamos la data extra en atributos 'data-'
+                    opcionesHTML += `
+                        <option value="${row.IdBus}" 
+                                data-placa="${row.Placa}" 
+                                data-tipo="${row.NombreTipo}" 
+                                data-asientos="${row.CapacidadAsientos}" 
+                                data-chofer="${row.NombreCompleto}">
+                            ${row.Placa}
+                        </option>`;
+                });
+
+                $("#cboBus").html(opcionesHTML).trigger('change');
+
+            } else {
+                $("#cboBus").html('<option value="">Error al cargar</option>').trigger('change');
+            }
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            console.log(xhr.status + " \n" + xhr.responseText, "\n" + thrownError);
+            $("#cboBus").html('<option value="">Error de conexión</option>').trigger('change');
+        }
+    });
+}
 
 function cargarRutass() {
 
@@ -172,6 +290,44 @@ function viajesProgramados() {
         }
     });
 }
+
+$('#tbData tbody').on('click', '.btn-detalle', function () {
+    let fila = $(this).closest('tr');
+    if (fila.hasClass('child')) {
+        fila = fila.prev();
+    }
+
+    let data = tablaData.row(fila).data();
+
+    if (data.Estado !== 1) {
+        // Personalizamos un poco el mensaje para que el usuario entienda el motivo
+        mostrarAlertaZero(
+            "¡Atención!",
+            "Solo se pueden modificar los viajes en estado 'Programado'. Este viaje ya está " + data.EstadoTexto + ".",
+            "warning"
+        );
+        return;
+    }
+
+    let textoSms = `Salida: ${data.NombreRuta} (${data.PlacaBus})`;
+
+    $("#lblBusDato").text(textoSms);
+
+    $("#cboBus").val("").trigger("change");
+
+    $("#lblNombreChofer").text("Esperando...");
+    $("#lblNroAsien").text("Esperando...");
+    $("#lblNroplaca").text("Esperando...");
+
+    $("#mdCambioBus").modal("show");
+
+});
+
+$("#btnVerificar").on("click", function () {
+
+    $("#divNuevoBus").addClass("d-none");
+    $("#divDetalleVerifi").removeClass("d-none");
+});
 
 $('#tbData tbody').on('click', '.btn-estado', function () {
     let fila = $(this).closest('tr');

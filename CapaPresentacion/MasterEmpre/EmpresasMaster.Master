@@ -65,8 +65,9 @@
 
             <div data-simplebar="">
 
-                <!--- Sidenav Menu -->
+                <!--- Sidenav Menu  -->
                 <ul class="side-nav">
+                    <li id="lblNomRoll" class="side-nav-title mt-2">Rol...</li>
 
                     <li class="side-nav-item">
                         <a href="InicioEmpresa.aspx" class="side-nav-link">
@@ -104,16 +105,6 @@
                                         <span class="menu-text">Conductores</span>
                                     </a>
                                 </li>
-                                <%--<li class="side-nav-item">
-                                    <a href="Buses.aspx" class="side-nav-link">
-                                        <span class="menu-text">Buses</span>
-                                    </a>
-                                </li>--%>
-                                <%--<li class="side-nav-item">
-                                    <a href="#" class="side-nav-link">
-                                        <span class="menu-text">Consultas</span>
-                                    </a>
-                                </li>--%>
                             </ul>
                         </div>
                     </li>
@@ -131,11 +122,6 @@
                                         <span class="menu-text">Terminales / Rutas</span>
                                     </a>
                                 </li>
-                                <%--<li class="side-nav-item">
-                                    <a href="Rutas.aspx" class="side-nav-link">
-                                        <span class="menu-text">Rutas</span>
-                                    </a>
-                                </li>--%>
                                 <li class="side-nav-item">
                                     <a href="TarifasRuta.aspx" class="side-nav-link">
                                         <span class="menu-text">Tarifas</span>
@@ -147,12 +133,6 @@
 
                     <li class="side-nav-title mt-2">Programacion Viajes</li>
 
-                    <%--<li class="side-nav-item">
-                        <a href="Viajes.aspx" class="side-nav-link">
-                            <span class="menu-icon"><i class="ti ti-forms"></i></span>
-                            <span class="menu-text"> Viajes </span>
-                        </a>
-                    </li>--%>
 
                     <li class="side-nav-item">
                         <a data-bs-toggle="collapse" href="#sidebarEcommerce" aria-expanded="false" aria-controls="sidebarEcommerce" class="side-nav-link">
@@ -202,6 +182,8 @@
                             </ul>
                         </div>
                     </li>
+
+                    <li class="side-nav-title mt-2">Menu de Encomiendas</li>
 
                     <li class="side-nav-item">
                         <a data-bs-toggle="collapse" href="#sidebarMultiLevel" aria-expanded="false" aria-controls="sidebarMultiLevel"
@@ -261,26 +243,16 @@
                     <li class="side-nav-item">
                         <a data-bs-toggle="collapse" href="#sidebarIcons" aria-expanded="false" aria-controls="sidebarIcons" class="side-nav-link">
                             <span class="menu-icon"><i class="ti ti-ticket"></i></span>
-                            <span class="menu-text"> Encomiendas </span>
+                            <span class="menu-text"> Reportes </span>
                             <span class="menu-arrow"></span>
                         </a>
                         <div class="collapse" id="sidebarIcons">
                             <ul class="sub-menu">
                                 <li class="side-nav-item">
-                                    <a href="RecepcionesEnco.aspx" class="side-nav-link">
-                                        <span class="menu-text">Recepciones</span>
-                                    </a>
-                                </li>
-                                <%--<li class="side-nav-item">
-                                    <a href="Entregas.aspx" class="side-nav-link">
-                                        <span class="menu-text">Entregas</span>
-                                    </a>
-                                </li>--%>
-                                <%--<li class="side-nav-item">
                                     <a href="#" class="side-nav-link">
                                         <span class="menu-text">Consultas</span>
                                     </a>
-                                </li>--%>
+                                </li>
                             </ul>
                         </div>
                     </li>

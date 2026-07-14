@@ -150,7 +150,8 @@ $(document).ready(function () {
         cargarDatosEmpresa();
         // mostrar la imagen y nombre del usuairo 
         $("#imgUserTra").attr("src", usua.FotoUrl || "/Imagenes/sinImagen.png");
-        $("#lblRol").text(usua.NombreRol);
+        $("#lblRol").text(usua.NombreEmpresa);
+        $("#lblNomRoll").text(usua.NombreRol);
     } catch (error) {
         console.error("Error leyendo sesión", error);
         sessionStorage.clear();

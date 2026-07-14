@@ -2,6 +2,22 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <link href="../assets/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
     <link href="../assets/vendor/datatables/extensiones/css/responsive.dataTables.min.css" rel="stylesheet" type="text/css" />
+<style>
+    .select2-container .select2-selection--single {
+        height: 38px !important; /* Ajustado al tamaño estándar de Boron */
+        padding: 0.35rem 0.5rem;
+        border: 1px solid var(--bs-border-color);
+        border-radius: var(--bs-border-radius);
+    }
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 1.5 !important;
+        padding-left: 0px !important;
+        color: var(--bs-body-color);
+    }
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 36px !important;
+    }
+</style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
     <div class="alert alert-primary d-flex flex-wrap justify-content-between align-items-center p-3 mb-4" role="alert">
@@ -54,8 +70,16 @@
             </div>
 
             <div class="card">
-                <div class="card-header border-bottom border-dashed bg-light">
-                    <h5 id="lblRuta" class="card-title text-primary mb-0 fw-bold">Esperando selección de salida...</h5>
+                <div class="card-header border-bottom border-dashed bg-light d-flex flex-wrap justify-content-between align-items-center">
+                    <h5 class="card-title mb-0 text-dark">
+                        <i class="ti ti-layout-grid-add me-2"></i>Resultado de la consulta
+                    </h5>
+
+                    <div class="d-flex gap-3 fs-13 fw-medium mt-2 mt-sm-0">
+                        <span class="d-flex align-items-center text-muted"><i class="ti ti-eye text-success me-1 fs-16"></i>Acciones</span>
+                        <span class="d-flex align-items-center text-muted"><i class="ti ti-printer text-warning me-1 fs-16"></i>Lista Pasajeros</span>
+                        <span class="d-flex align-items-center text-muted"><i class="ti ti-settings text-danger me-1 fs-16"></i>Cambio Estado</span>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -136,6 +160,61 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal"><i class="ti ti-square-rounded-x fs-16 align-middle me-1"></i>Salir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="mdCambioBus" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body p-4">
+                    <div class="text-center">
+                        <i class="ti ti-alert-circle h1 text-warning"></i>
+                        <h4 id="lblBusDato" class="mt-2 mb-3">Esperando...</h4>
+                        <input id="txtNroAsientos" value="0" type="hidden" />
+                    </div>
+
+                    <div id="divNuevoBus" class="align-items-center bg-light border border-dashed rounded p-2 shadow-sm">
+                        <h5 class="text-center text-muted fs-12 mb-2">Seleccione el nuevo bus y verifique la compatibilidad para el cambio.</h5>
+                        <div class="mb-3">
+                            <label for="cboBus" class="form-label fw-medium">Asignar Bus <span class="text-danger">*</span></label>
+                            <select class="form-select" id="cboBus">
+                            </select>
+                        </div>
+                        <div class="d-flex justify-content-center mb-2">
+                            <button type="button" id="btnVerificar" class="btn btn-primary">
+                                <i class="ti ti-restore fs-16 align-middle me-1"></i>Verificar y Comparar
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="divDetalleVerifi" class="alert alert-info d-none" role="alert">
+                        <div class="lh-1 mb-3 mt-2"><strong>Informacion - </strong>de la Verificacion</div>
+
+                        <div class="d-flex align-items-center border border-dashed rounded p-2 gap-3 mb-3">
+                            <div class="rounded bg-light avatar-xl d-flex align-items-center justify-content-center">
+                                <img src="../Imagenes/cambus.png" alt="" class="avatar-xl">
+                            </div>
+                            <div>
+                                <p class="text-muted fw-medium fs-14 my-1" id="lblNombreChofer">Esperando...</p>
+                                <p class="text-muted fw-medium fs-14 my-1"><span class="text-dark">Nro Asientos : </span><span id="lblNroAsien">Esperando...</span></p>
+                                <p class="text-muted fw-medium fs-14 my-1"><span class="text-dark">Nro Placa : </span><span id="lblNroplaca">Esperando...</span></p>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-center mb-2">
+                            <button id="btnConfirmar" type="button" class="btn btn-warning">
+                                <i class="ti ti-device-floppy fs-16 align-middle me-1"></i>Guardar Cambio de Bus
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="ti ti-x fs-16 align-middle me-1"></i>Salir
+                    </button>
                 </div>
             </div>
         </div>

@@ -76,7 +76,7 @@
                     </h5>
 
                     <div class="d-flex gap-3 fs-13 fw-medium mt-2 mt-sm-0">
-                        <span class="d-flex align-items-center text-muted"><i class="ti ti-eye text-success me-1 fs-16"></i>Acciones</span>
+                        <span class="d-flex align-items-center text-muted"><i class="ti ti-eye text-success me-1 fs-16"></i>Cambio de Bus</span>
                         <span class="d-flex align-items-center text-muted"><i class="ti ti-printer text-warning me-1 fs-16"></i>Lista Pasajeros</span>
                         <span class="d-flex align-items-center text-muted"><i class="ti ti-settings text-danger me-1 fs-16"></i>Cambio Estado</span>
                     </div>
@@ -190,22 +190,26 @@
                     </div>
 
                     <div id="divDetalleVerifi" class="alert alert-info d-none" role="alert">
-                        <div class="lh-1 mb-3 mt-2"><strong>Informacion - </strong>de la Verificacion</div>
+                        <div class="lh-1 mb-3 mt-2"><strong>Información de la Verificación</strong></div>
 
-                        <div class="d-flex align-items-center border border-dashed rounded p-2 gap-3 mb-3">
+                        <div class="d-flex align-items-center bg-white border border-info rounded p-2 gap-3 mb-3 shadow-sm">
                             <div class="rounded bg-light avatar-xl d-flex align-items-center justify-content-center">
                                 <img src="../Imagenes/cambus.png" alt="" class="avatar-xl">
                             </div>
-                            <div>
-                                <p class="text-muted fw-medium fs-14 my-1" id="lblNombreChofer">Esperando...</p>
-                                <p class="text-muted fw-medium fs-14 my-1"><span class="text-dark">Nro Asientos : </span><span id="lblNroAsien">Esperando...</span></p>
-                                <p class="text-muted fw-medium fs-14 my-1"><span class="text-dark">Nro Placa : </span><span id="lblNroplaca">Esperando...</span></p>
+                            <div class="flex-grow-1">
+                                <p class="text-muted fw-medium fs-14 my-1"><i class="ti ti-steering-wheel text-info me-1"></i><span id="lblNombreChofer" class="text-dark">Esperando...</span></p>
+                                <p class="text-muted fw-medium fs-14 my-1"><i class="ti ti-users text-info me-1"></i>Capacidad: <span id="lblNroAsien" class="text-dark fw-bold">0</span> Asientos</p>
+                                <p class="text-muted fw-medium fs-14 my-1"><i class="ti ti-bus text-info me-1"></i>Placa: <span id="lblNroplaca" class="text-dark fw-bold">---</span></p>
                             </div>
                         </div>
 
-                        <div class="d-flex justify-content-center mb-2">
-                            <button id="btnConfirmar" type="button" class="btn btn-warning">
-                                <i class="ti ti-device-floppy fs-16 align-middle me-1"></i>Guardar Cambio de Bus
+                        <div class="d-flex justify-content-between mt-3">
+                            <button id="btnRetrocederBus" type="button" class="btn btn-soft-info">
+                                <i class="ti ti-arrow-left fs-16 align-middle me-1"></i>Cambiar Selección
+                            </button>
+
+                            <button id="btnConfirmar" type="button" class="btn btn-warning fw-bold">
+                                <i class="ti ti-device-floppy fs-16 align-middle me-1"></i>Guardar Cambio
                             </button>
                         </div>
                     </div>

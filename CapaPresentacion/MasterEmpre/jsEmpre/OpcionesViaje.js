@@ -1,6 +1,7 @@
 ﻿
 let tablaData;
 const { jsPDF } = window.jspdf;
+let viajeCambioData = null;
 
 $(document).ready(function () {
     cargarRutass();
@@ -73,16 +74,27 @@ function formatoSeleccionBus(estado) {
     `);
 }
 
+// EVENTO: SELECCIÓN VISUAL DEL BUS EN EL SELECT2
 $("#cboBus").on("change", function () {
     let $selected = $(this).find(':selected');
+    let val = $(this).val();
 
-    console.log($selected);
-    let chofer = $selected.data("chofer");
+    // Si se limpia el select, volvemos al estado inicial "Esperando..."
+    if (!val) {
+        $("#lblNombreChofer").text("Esperando...");
+        $("#lblNroAsien").text("Esperando...");
+        $("#lblNroplaca").text("Esperando...");
+        return;
+    }
 
+    let chofer = $selected.data("chofer") || "No asignado";
+    let placa = $selected.data("placa");
+    let asientos = $selected.data("asientos");
+
+    // Pintamos los datos en el recuadro azul (divDetalleVerifi)
     $("#lblNombreChofer").text(chofer);
-    //$("#lblNroAsien").text("Esperando...");
-    //$("#lblNroplaca").text("Esperando...");
-
+    $("#lblNroAsien").text(asientos);
+    $("#lblNroplaca").text(placa);
 });
 
 function cargarBuses() {
@@ -270,7 +282,7 @@ function viajesProgramados() {
             },
             {
                 "defaultContent": `
-                    <button class="btn btn-soft-primary btn-icon btn-sm rounded-circle btn-detalle me-1" title="Detalle Viaje">
+                    <button class="btn btn-soft-primary btn-icon btn-sm rounded-circle btn-cambiobus me-1" title="Cambio de Bus">
                         <i class="ti ti-eye"></i>
                     </button>
                     <button class="btn btn-soft-success btn-icon btn-sm rounded-circle btn-reportes me-1" title="Lista Pasajeros">
@@ -291,7 +303,8 @@ function viajesProgramados() {
     });
 }
 
-$('#tbData tbody').on('click', '.btn-detalle', function () {
+// EVENTO: ABRIR MODAL CAMBIO DE BUS
+$('#tbData tbody').on('click', '.btn-cambiobus', function () {
     let fila = $(this).closest('tr');
     if (fila.hasClass('child')) {
         fila = fila.prev();
@@ -300,34 +313,100 @@ $('#tbData tbody').on('click', '.btn-detalle', function () {
     let data = tablaData.row(fila).data();
 
     if (data.Estado !== 1) {
-        // Personalizamos un poco el mensaje para que el usuario entienda el motivo
-        mostrarAlertaZero(
-            "¡Atención!",
-            "Solo se pueden modificar los viajes en estado 'Programado'. Este viaje ya está " + data.EstadoTexto + ".",
-            "warning"
-        );
+        mostrarAlertaZero("¡Atención!", "Solo se pueden modificar los viajes en estado 'Programado'. Este viaje ya está " + data.EstadoTexto + ".", "warning");
         return;
     }
 
+    // GUARDAMOS LA VARIABLE GLOBAL DEL VIAJE (Si no la tenías, asegúrate de declararla arriba: let viajeCambioData = null;)
+    viajeCambioData = data;
+
     let textoSms = `Salida: ${data.NombreRuta} (${data.PlacaBus})`;
-
     $("#lblBusDato").text(textoSms);
+    $("#txtNroAsientos").val(data.CapacidadAsientos);
 
+    // Estado inicial de los paneles
+    $("#divNuevoBus").show();
+    $("#divDetalleVerifi").addClass("d-none").hide();
+
+    //$("#divNuevoBus").removeClass("d-none");
+    //$("#divDetalleVerifi").addClass("d-none");
+
+    // Limpiamos el Select2
     $("#cboBus").val("").trigger("change");
 
-    $("#lblNombreChofer").text("Esperando...");
-    $("#lblNroAsien").text("Esperando...");
-    $("#lblNroplaca").text("Esperando...");
-
+    // Mostramos modal
     $("#mdCambioBus").modal("show");
-
 });
 
+// EVENTO: VERIFICACIÓN MATEMÁTICA Y COMPARACIÓN
 $("#btnVerificar").on("click", function () {
+    let idNuevoBus = $("#cboBus").val();
 
-    $("#divNuevoBus").addClass("d-none");
-    $("#divDetalleVerifi").removeClass("d-none");
+    if (!idNuevoBus) {
+        ToastMaster.fire({ icon: 'warning', title: 'Debe seleccionar un Bus de la lista.' });
+        $("#cboBus").select2('open');
+        return;
+    }
+
+    // 1. Validar que no elija el mismo bus que ya tiene el viaje
+    if (parseInt(idNuevoBus) === viajeCambioData.IdBus) {
+        mostrarAlertaZero("Atención", "El bus seleccionado es el mismo que ya está asignado al viaje.", "warning");
+        return;
+    }
+
+    let $selected = $("#cboBus").find(':selected');
+    let asientosNuevos = parseInt($selected.data("asientos"));
+    let asientosActuales = parseInt($("#txtNroAsientos").val()); // Guardado del bus viejo
+
+    // 2. MATEMÁTICA: Verificamos compatibilidad
+    if (asientosNuevos < asientosActuales) {
+        // En tu C#, seguramente tendrás una consulta de Asientos Vendidos. 
+        // Si el bus viejo tenía 60 asientos y el nuevo 40, y ya vendiste 45 boletos, no pueden viajar.
+        // Aquí puedes hacer un AJAX para ver cuántos boletos reales hay vendidos, o simplemente rechazarlo.
+
+        Swal.fire({
+            title: '¡Capacidad Menor!',
+            html: `El bus actual tiene <b>${asientosActuales} asientos</b> y el nuevo solo tiene <b>${asientosNuevos} asientos</b>.<br><br>Asegúrese de que la cantidad de pasajes ya vendidos no supere la capacidad de este nuevo vehículo.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: '<i class="ti ti-check me-1"></i> Entiendo, Continuar',
+            cancelButtonText: '<i class="ti ti-x me-1"></i> Cancelar',
+            customClass: {
+                confirmButton: "btn btn-warning me-2 mt-2",
+                cancelButton: "btn btn-soft-secondary mt-2"
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                mostrarPanelConfirmacion();
+            }
+        });
+    } else {
+        // Si el bus nuevo es más grande o igual, pasa directo
+        mostrarPanelConfirmacion();
+    }
 });
+
+// FUNCION: Mostrar el panel de confirmación
+function mostrarPanelConfirmacion() {
+    // 1. Ocultamos suavemente el combo del bus
+    $("#divNuevoBus").slideUp(300, function () {
+        // 2. EL TRUCO: Lo ocultamos con JS, le quitamos la atadura de Bootstrap, y lo deslizamos
+        $("#divDetalleVerifi").hide().removeClass("d-none").slideDown(300);
+    });
+}
+
+// EVENTO: Botón para retroceder
+$("#btnRetrocederBus").on("click", function () {
+    // 1. Ocultamos suavemente el detalle
+    $("#divDetalleVerifi").slideUp(300, function () {
+        // 2. Limpieza: Le devolvemos su clase original por si cerramos el modal
+        $(this).addClass("d-none").css("display", "");
+
+        // 3. Volvemos a mostrar el combo
+        $("#divNuevoBus").slideDown(300);
+    });
+});
+
 
 $('#tbData tbody').on('click', '.btn-estado', function () {
     let fila = $(this).closest('tr');

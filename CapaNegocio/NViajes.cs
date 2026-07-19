@@ -49,5 +49,15 @@ namespace CapaNegocio
             return DViajes.GetInstance().ConsultarTarifario(IdEmpresa, IdOrigen, IdDestino, IdTipoBus);
         }
 
+        public Respuesta<List<NotificaViajeDTO>> ListaNotificacionViaje(int IdViaje, int IdEmpresa)
+        {
+            return DViajes.GetInstance().ListaNotificacionViaje(IdViaje, IdEmpresa);
+        }
+
+        public Respuesta<List<NotificacionDestinoDTO>> ListaNotificacionEncoViaje(int IdViaje, int IdEmpresa)
+        {
+            return DViajes.GetInstance().ListaNotificacionEncoViaje(IdViaje, IdEmpresa);
+        }
+
     }
 }

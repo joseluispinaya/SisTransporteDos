@@ -2,6 +2,7 @@
 let tablaData;
 const { jsPDF } = window.jspdf;
 let viajeCambioData = null;
+let totalAsientosOcupados = 0;
 
 $(document).ready(function () {
     cargarRutass();
@@ -317,25 +318,56 @@ $('#tbData tbody').on('click', '.btn-cambiobus', function () {
         return;
     }
 
-    // GUARDAMOS LA VARIABLE GLOBAL DEL VIAJE (Si no la tenías, asegúrate de declararla arriba: let viajeCambioData = null;)
+    // 1. Guardamos la data general del viaje
     viajeCambioData = data;
 
-    let textoSms = `Salida: ${data.NombreRuta} (${data.PlacaBus})`;
-    $("#lblBusDato").text(textoSms);
-    $("#txtNroAsientos").val(data.CapacidadAsientos);
+    // 2. Efecto visual de carga en el botón presionado (opcional pero recomendado)
+    let $btnFila = $(this);
+    let textoOriginalBtn = $btnFila.html();
+    $btnFila.html('<i class="spinner-border spinner-border-sm align-middle"></i>').prop('disabled', true);
 
-    // Estado inicial de los paneles
-    $("#divNuevoBus").show();
-    $("#divDetalleVerifi").addClass("d-none").hide();
+    // 3. LA CONSULTA AJAX ANTES DE ABRIR EL MODAL
+    $.ajax({
+        url: "VentaPasajes.aspx/ObtenerAsientosVendidos", // URL que proporcionaste
+        type: "POST",
+        data: JSON.stringify({ IdViaje: parseInt(data.IdViaje) }),
+        contentType: 'application/json; charset=utf-8',
+        dataType: "json",
+        success: function (response) {
 
-    //$("#divNuevoBus").removeClass("d-none");
-    //$("#divDetalleVerifi").addClass("d-none");
+            // Restauramos el botón de la tabla
+            $btnFila.html(textoOriginalBtn).prop('disabled', false);
 
-    // Limpiamos el Select2
-    $("#cboBus").val("").trigger("change");
+            if (response.d.Estado) {
+                // Contamos cuántos asientos están ocupados (Vendidos + Reservados)
+                const ocupados = response.d.Data;
+                totalAsientosOcupados = (ocupados && ocupados.length > 0) ? ocupados.length : 0;
 
-    // Mostramos modal
-    $("#mdCambioBus").modal("show");
+                // 4. PREPARAMOS EL MODAL
+                let textoSms = `Salida: ${data.NombreRuta} (${data.PlacaBus})`;
+                $("#lblBusDato").text(textoSms);
+                $("#txtNroAsientos").val(data.CapacidadAsientos);
+
+                // Estado inicial de los paneles
+                $("#divNuevoBus").show();
+                $("#divDetalleVerifi").addClass("d-none").hide();
+
+                // Limpiamos el Select2
+                $("#cboBus").val("").trigger("change");
+
+                // 5. ¡AHORA SÍ ABRIMOS EL MODAL!
+                $("#mdCambioBus").modal("show");
+
+            } else {
+                mostrarAlertaZero("¡Error!", response.d.Mensaje, "error");
+            }
+        },
+        error: function (xhr) {
+            $btnFila.html(textoOriginalBtn).prop('disabled', false);
+            console.log(xhr.responseText);
+            mostrarAlertaZero("¡Atención!", "Error al consultar los asientos vendidos.", "error");
+        }
+    });
 });
 
 // EVENTO: VERIFICACIÓN MATEMÁTICA Y COMPARACIÓN
@@ -348,7 +380,6 @@ $("#btnVerificar").on("click", function () {
         return;
     }
 
-    // 1. Validar que no elija el mismo bus que ya tiene el viaje
     if (parseInt(idNuevoBus) === viajeCambioData.IdBus) {
         mostrarAlertaZero("Atención", "El bus seleccionado es el mismo que ya está asignado al viaje.", "warning");
         return;
@@ -356,34 +387,51 @@ $("#btnVerificar").on("click", function () {
 
     let $selected = $("#cboBus").find(':selected');
     let asientosNuevos = parseInt($selected.data("asientos"));
-    let asientosActuales = parseInt($("#txtNroAsientos").val()); // Guardado del bus viejo
+    let asientosViejos = parseInt($("#txtNroAsientos").val());
 
-    // 2. MATEMÁTICA: Verificamos compatibilidad
-    if (asientosNuevos < asientosActuales) {
-        // En tu C#, seguramente tendrás una consulta de Asientos Vendidos. 
-        // Si el bus viejo tenía 60 asientos y el nuevo 40, y ya vendiste 45 boletos, no pueden viajar.
-        // Aquí puedes hacer un AJAX para ver cuántos boletos reales hay vendidos, o simplemente rechazarlo.
+    // ==========================================
+    // LÓGICA MATEMÁTICA CON ASIENTOS REALES
+    // ==========================================
 
+    // ESCENARIO 3: BLOQUEO TOTAL (El bus nuevo es tan pequeño que la gente se queda parada)
+    if (asientosNuevos < totalAsientosOcupados) {
         Swal.fire({
-            title: '¡Capacidad Menor!',
-            html: `El bus actual tiene <b>${asientosActuales} asientos</b> y el nuevo solo tiene <b>${asientosNuevos} asientos</b>.<br><br>Asegúrese de que la cantidad de pasajes ya vendidos no supere la capacidad de este nuevo vehículo.`,
+            title: '¡Operación Imposible!',
+            html: `No puede asignar este bus.<br><br>
+                   El nuevo vehículo solo tiene <b>${asientosNuevos} asientos</b>, pero actualmente ya hay <b>${totalAsientosOcupados} pasajeros</b> registrados (vendidos o reservados) para este viaje.`,
+            icon: 'error',
+            confirmButtonText: 'Entendido',
+            customClass: { confirmButton: "btn btn-danger mt-2" },
+            buttonsStyling: false
+        });
+        return; // Cortamos la ejecución aquí
+    }
+
+    // ESCENARIO 2: ADVERTENCIA (El bus es más pequeño que el original, pero la gente sí cabe)
+    if (asientosNuevos < asientosViejos) {
+        Swal.fire({
+            title: '¡Capacidad Reducida!',
+            html: `El bus original tenía <b>${asientosViejos} asientos</b> y el nuevo solo tiene <b>${asientosNuevos}</b>.<br><br>
+                   Los ${totalAsientosOcupados} pasajeros actuales <b>SÍ CABEN</b>, pero reducirá su capacidad de ventas futuras para este viaje.<br>¿Desea continuar?`,
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: '<i class="ti ti-check me-1"></i> Entiendo, Continuar',
+            confirmButtonText: '<i class="ti ti-check me-1"></i> Sí, continuar',
             cancelButtonText: '<i class="ti ti-x me-1"></i> Cancelar',
             customClass: {
                 confirmButton: "btn btn-warning me-2 mt-2",
                 cancelButton: "btn btn-soft-secondary mt-2"
-            }
+            },
+            buttonsStyling: false
         }).then((result) => {
             if (result.isConfirmed) {
                 mostrarPanelConfirmacion();
             }
         });
-    } else {
-        // Si el bus nuevo es más grande o igual, pasa directo
-        mostrarPanelConfirmacion();
+        return;
     }
+
+    // ESCENARIO 1: ÉXITO DIRECTO (El bus es igual o más grande)
+    mostrarPanelConfirmacion();
 });
 
 // FUNCION: Mostrar el panel de confirmación
@@ -407,6 +455,10 @@ $("#btnRetrocederBus").on("click", function () {
     });
 });
 
+$("#btnConfirmar").on("click", function () {
+
+    mostrarAlertaZero("¡Atención!", "En proceso de desarrollo....", "warning");
+});
 
 $('#tbData tbody').on('click', '.btn-estado', function () {
     let fila = $(this).closest('tr');

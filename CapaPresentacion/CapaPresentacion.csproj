@@ -47,12 +47,16 @@
       <HintPath>..\packages\BCrypt.Net-Next.4.1.0\lib\net462\BCrypt.Net-Next.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System.Buffers, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Buffers.4.6.1\lib\net462\System.Buffers.dll</HintPath>
     </Reference>
     <Reference Include="System.Memory, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Memory.4.6.3\lib\net462\System.Memory.dll</HintPath>
     </Reference>
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Numerics.Vectors, Version=4.1.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Numerics.Vectors.4.6.1\lib\net462\System.Numerics.Vectors.dll</HintPath>
@@ -2897,6 +2901,8 @@
     <Content Include="MasterEmpre\jsEmpre\ConsultasEncomi.js" />
     <Content Include="MasterEmpre\jsEmpre\ConsultasPasajes.js" />
     <Content Include="MasterEmpre\jsEmpre\Masterpa.js" />
+    <Content Include="MasterEmpre\jsEmpre\Notificaciones.js" />
+    <Content Include="MasterEmpre\jsEmpre\NotifiPruebas.js" />
     <Content Include="MasterEmpre\jsEmpre\OpcionesViaje.js" />
     <Content Include="MasterEmpre\jsEmpre\RecepcionEnco.js" />
     <Content Include="MasterEmpre\jsEmpre\TarifasRuta.js" />
@@ -2904,6 +2910,7 @@
     <Content Include="MasterEmpre\jsEmpre\Usuarios.js" />
     <Content Include="MasterEmpre\jsEmpre\VentaPasajes.js" />
     <Content Include="MasterEmpre\jsEmpre\Viajes.js" />
+    <Content Include="MasterEmpre\Notificaciones.aspx" />
     <Content Include="MasterEmpre\OpcionesViaje.aspx" />
     <Content Include="MasterEmpre\RecepcionesEnco.aspx" />
     <Content Include="MasterEmpre\TarifasRuta.aspx" />
@@ -2984,6 +2991,13 @@
     </Compile>
     <Compile Include="MasterEmpre\InicioEmpresa.aspx.designer.cs">
       <DependentUpon>InicioEmpresa.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MasterEmpre\Notificaciones.aspx.cs">
+      <DependentUpon>Notificaciones.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterEmpre\Notificaciones.aspx.designer.cs">
+      <DependentUpon>Notificaciones.aspx</DependentUpon>
     </Compile>
     <Compile Include="MasterEmpre\OpcionesViaje.aspx.cs">
       <DependentUpon>OpcionesViaje.aspx</DependentUpon>

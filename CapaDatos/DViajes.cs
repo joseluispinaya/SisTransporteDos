@@ -308,5 +308,99 @@ namespace CapaDatos
             }
         }
 
+        public Respuesta<List<NotificaViajeDTO>> ListaNotificacionViaje(int IdViaje, int IdEmpresa)
+        {
+            try
+            {
+                List<NotificaViajeDTO> rptLista = new List<NotificaViajeDTO>();
+
+                using (SqlConnection con = ConexionBD.GetInstance().ConexionDB())
+                {
+                    using (SqlCommand comando = new SqlCommand("usp_PasajerosPorViajeNotificacion", con))
+                    {
+                        comando.CommandType = CommandType.StoredProcedure;
+                        comando.Parameters.AddWithValue("@IdViaje", IdViaje);
+                        comando.Parameters.AddWithValue("@IdEmpresa", IdEmpresa);
+                        con.Open();
+
+                        using (SqlDataReader dr = comando.ExecuteReader())
+                        {
+                            while (dr.Read())
+                            {
+                                rptLista.Add(new NotificaViajeDTO
+                                {
+                                    NombreCliente = dr["NombreCliente"].ToString(),
+                                    ExpoPushToken = dr["ExpoPushToken"].ToString()
+                                });
+                            }
+                        }
+                    }
+                }
+                return new Respuesta<List<NotificaViajeDTO>>()
+                {
+                    Estado = true,
+                    Data = rptLista,
+                    Mensaje = "Lista obtenidos correctamente"
+                };
+            }
+            catch (Exception ex)
+            {
+                // Maneja cualquier error inesperado
+                return new Respuesta<List<NotificaViajeDTO>>()
+                {
+                    Estado = false,
+                    Mensaje = "Ocurrió un error: " + ex.Message,
+                    Data = null
+                };
+            }
+        }
+
+        public Respuesta<List<NotificacionDestinoDTO>> ListaNotificacionEncoViaje(int IdViaje, int IdEmpresa)
+        {
+            try
+            {
+                List<NotificacionDestinoDTO> rptLista = new List<NotificacionDestinoDTO>();
+
+                using (SqlConnection con = ConexionBD.GetInstance().ConexionDB())
+                {
+                    using (SqlCommand comando = new SqlCommand("usp_EncomiendasPorViajeNotifica", con))
+                    {
+                        comando.CommandType = CommandType.StoredProcedure;
+                        comando.Parameters.AddWithValue("@IdViaje", IdViaje);
+                        comando.Parameters.AddWithValue("@IdEmpresa", IdEmpresa);
+                        con.Open();
+
+                        using (SqlDataReader dr = comando.ExecuteReader())
+                        {
+                            while (dr.Read())
+                            {
+                                rptLista.Add(new NotificacionDestinoDTO
+                                {
+                                    IdEncomienda = Convert.ToString(dr["IdEncomienda"]),
+                                    ExpoPushToken = dr["ExpoPushToken"].ToString()
+                                });
+                            }
+                        }
+                    }
+                }
+                return new Respuesta<List<NotificacionDestinoDTO>>()
+                {
+                    Estado = true,
+                    Data = rptLista,
+                    Mensaje = "Lista obtenidos correctamente"
+                };
+            }
+            catch (Exception ex)
+            {
+                // Maneja cualquier error inesperado
+                return new Respuesta<List<NotificacionDestinoDTO>>()
+                {
+                    Estado = false,
+                    Mensaje = "Ocurrió un error: " + ex.Message,
+                    Data = null
+                };
+            }
+        }
+
     }
 }

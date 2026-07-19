@@ -48,6 +48,10 @@
     <Compile Include="DTOs\ClienteDTO.cs" />
     <Compile Include="DTOs\EncomiendaImpresionDTO.cs" />
     <Compile Include="DTOs\EncomiendasViajeDTO.cs" />
+    <Compile Include="DTOs\NotificacionAvisosDTO.cs" />
+    <Compile Include="DTOs\NotificacionDestinoDTO.cs" />
+    <Compile Include="DTOs\NotificaEncomDTO.cs" />
+    <Compile Include="DTOs\NotificaViajeDTO.cs" />
     <Compile Include="DTOs\PasajeroViajeDTO.cs" />
     <Compile Include="DTOs\TarifarioDTO.cs" />
     <Compile Include="DTOs\TarifasDTO.cs" />

@@ -9,46 +9,51 @@ let tablaDataBus;
 let idEditarBus = 0;
 
 $(document).ready(function () {
-    listaChoferes();
+    //listaChoferes();
     cargarBuscadorChoferes();
     listaTipoBuses();
     cargarTipoBuses();
-    listaBuses();
+    //listaBuses();
+    listaBusesApi();
+    listaChoferesApi();
+
 });
+
 
 // Choferes
 function listaChoferesApi() {
-    //if ($.fn.DataTable.isDataTable("#tbChofer")) {
-    //    $("#tbChofer").DataTable().destroy();
-    //    $('#tbChofer tbody').empty();
-    //}
 
     tablaDataChofe = $("#tbChofer").DataTable({
         responsive: true,
         searching: false,
         info: false,
         "ajax": {
-            "url": `${API_BASE_URL}/conductores/listaChoferes`,
-            "type": "GET",
+            "url": 'Conductores.aspx/ListaChoferesApi',
+            "type": "POST",
+            "contentType": "application/json; charset=utf-8",
             "dataType": "json",
+            "data": function () {
+                return "{}";
+            },
             "dataSrc": function (json) {
-                if (json.Estado) {
-                    return json.Data;
+                if (json.d.Estado) {
+                    return json.d.Data;
                 } else {
-                    mostrarAlertaZero("Mensaje", json.Mensaje, "warning");
+                    // Aquí atrapamos el mensaje amigable si la API está apagada
+                    mostrarAlertaZero("¡Atención!", json.d.Mensaje, "error");
+
+                    // Limpiamos el mensaje de "Procesando..." de DataTables
+                    $("#tbChofer_processing").hide();
                     return [];
                 }
             },
-            "error": function (xhr, error, thrown) {
-                // Captura si la API se cae, no está disponible o da error 500/404
-                console.log("Error status:", xhr.status, "Detalles:", thrown);
-                mostrarAlertaZero("¡Atención!", "Error de comunicación el servidor no está disponible.", "error");
+            // Agregamos este bloque por si falla la aplicación Web (IIS)
+            "error": function (xhr, status, error) {
+                console.log("Error de capa Web:", xhr.status, error);
+                mostrarAlertaZero("¡Error Crítico!", "La aplicación web no responde. Recargue la página.", "error");
 
-                // 1. Ocultar forzosamente el mensaje de "Cargando..."
                 $("#tbChofer_processing").hide();
-
-                // 2. Colocar un mensaje manual en el cuerpo de la tabla (usamos colspan="4" porque tienes 4 columnas visibles)
-                $("#tbChofer tbody").html('<tr><td colspan="4" class="text-center text-muted">No se pudieron cargar los datos debido a un error de conexión.</td></tr>');
+                $("#tbChofer tbody").html('<tr><td colspan="4" class="text-center text-muted">Error de conexión con la plataforma.</td></tr>');
             }
         },
         "columns": [
@@ -73,7 +78,6 @@ function listaChoferesApi() {
                 "data": "Estado",
                 "className": "text-center",
                 render: function (data) {
-                    // Badges modernos (subtle) de Bootstrap 5
                     if (data === true)
                         return '<span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1"><i class="ti ti-check me-1"></i>Activo</span>';
                     else
@@ -81,8 +85,7 @@ function listaChoferesApi() {
                 }
             },
             {
-                "defaultContent": '<button class="btn btn-soft-primary btn-icon btn-sm rounded-circle btn-editar me-2"><i class="ti ti-pencil-plus"></i></button>' +
-                    '<button class="btn btn-soft-info btn-icon btn-sm rounded-circle btn-detalle"><i class="ti ti-eye"></i></button>',
+                "defaultContent": '<button class="btn btn-soft-primary btn-icon btn-sm rounded-circle btn-editar"><i class="ti ti-pencil-plus"></i></button>',
                 "orderable": false,
                 "searchable": false,
                 "className": "text-center"
@@ -561,6 +564,82 @@ $("#btnGuardarRegTipob").on("click", function () {
 });
 
 // Buses
+
+function listaBusesApi() {
+
+    tablaDataBus = $("#tbBuses").DataTable({
+        responsive: true,
+        searching: false,
+        info: false,
+        "ajax": {
+            "url": 'Conductores.aspx/ListaBusesApi',
+            "type": "POST",
+            "contentType": "application/json; charset=utf-8",
+            "dataType": "json",
+            "data": function () {
+                return "{}";
+            },
+            "dataSrc": function (json) {
+                if (json.d.Estado) {
+                    return json.d.Data;
+                } else {
+                    //mostrarAlertaZero("¡Atención!", json.d.Mensaje, "error");
+                    $("#tbBuses_processing").hide();
+                    return [];
+                }
+            },
+            // Agregamos este bloque por si falla la aplicación Web (IIS)
+            "error": function (xhr, status, error) {
+                console.log("Error de capa Web:", xhr.status, error);
+                mostrarAlertaZero("¡Error Crítico!", "La aplicación web no responde. Recargue la página.", "error");
+
+                $("#tbBuses_processing").hide();
+                $("#tbBuses tbody").html('<tr><td colspan="4" class="text-center text-muted">Error de conexión con la plataforma.</td></tr>');
+            }
+        },
+        "columns": [
+            { "data": "IdBus", "visible": false, "searchable": false },
+            {
+                "data": "Placa",
+                render: function (data) {
+                    return `<span class="badge p-1 bg-light text-dark fs-14 me-1"><i class="ti ti-bus align-text-top fs-14 text-warning me-1"></i>${data}</span>`;
+                }
+            },
+            {
+                "data": "CapacidadAsientos",
+                render: function (data, type, row) {
+                    return `
+                        <div class="d-flex flex-column">
+                            <span class="fw-semibold">${data} Asientos</span>
+                            <span class="text-muted" style="font-size: 0.85em;">Bus: ${row.NombreTipo}</span>
+                        </div>`;
+                }
+            },
+            {
+                "data": "Estado",
+                "className": "text-center",
+                render: function (data) {
+                    // Badges modernos (subtle) de Bootstrap 5
+                    if (data === true)
+                        return '<span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1"><i class="ti ti-check me-1"></i>Activo</span>';
+                    else
+                        return '<span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2 py-1"><i class="ti ti-x me-1"></i>Inactivo</span>';
+                }
+            },
+            {
+                "defaultContent": '<button class="btn btn-soft-primary btn-icon btn-sm rounded-circle btn-editar"><i class="ti ti-pencil-plus"></i></button>',
+                "orderable": false,
+                "searchable": false,
+                "className": "text-center"
+            }
+        ],
+        "order": [[0, "desc"]],
+        "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json"
+        }
+    });
+}
+
 function listaBuses() {
 
     tablaDataBus = $("#tbBuses").DataTable({

@@ -1,5 +1,11 @@
 ﻿
 let empresaGlobal = null;
+let useriGlobal = null;
+
+// micro servicio ServiceTransporte1
+const API_BASE_URL = "https://localhost:44325/api";
+
+const API_BASE_URL2 = "https://localhost:44306/api";
 
 // Configuramos diferentes SweetAlert de forma global
 const ToastMaster = Swal.mixin({
@@ -146,6 +152,8 @@ $(document).ready(function () {
 
     try {
         const usua = JSON.parse(usuario);
+        // Asignamos el valor a la variable global
+        useriGlobal = usua;
 
         cargarDatosEmpresa();
         // mostrar la imagen y nombre del usuairo 

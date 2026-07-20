@@ -19,6 +19,42 @@ namespace CapaPresentacion.MasterEmpre
 
         }
 
+        [WebMethod(EnableSession = true)]
+        public static Respuesta<List<EChofer>> ListaChoferesApi()
+        {
+            var usuario = SesionHelper.UsuarioLogueado;
+
+            if (usuario == null)
+                return new Respuesta<List<EChofer>> { Estado = false, Mensaje = "Sesión expirada" };
+
+            try
+            {
+                return Servicios.GetInstance().ListaChoferesServicio(usuario.IdEmpresa);
+            }
+            catch (Exception)
+            {
+                return new Respuesta<List<EChofer>> { Estado = false, Mensaje = "Ocurrió un error interno en el servidor. Intente nuevamente" };
+            }
+        }
+
+        [WebMethod(EnableSession = true)]
+        public static Respuesta<List<BusesDTO>> ListaBusesApi()
+        {
+            var usuario = SesionHelper.UsuarioLogueado;
+
+            if (usuario == null)
+                return new Respuesta<List<BusesDTO>> { Estado = false, Mensaje = "Sesión expirada" };
+
+            try
+            {
+                return Servicios.GetInstance().ListaBusesServicio(usuario.IdEmpresa);
+            }
+            catch (Exception)
+            {
+                return new Respuesta<List<BusesDTO>> { Estado = false, Mensaje = "Ocurrió un error interno en el servidor. Intente nuevamente" };
+            }
+        }
+
         // choferes
         [WebMethod(EnableSession = true)]
         public static Respuesta<List<EChofer>> ListaChoferes()

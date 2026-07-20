@@ -404,4 +404,32 @@ $("#btnEnviarYaNew").on("click", function () {
     });
 });
 
+function pruebaChoferes() {
+    $.ajax({
+        url: `${API_BASE_URL}/conductores/listaChoferes`,
+        type: "GET",
+        // Al pasar un objeto, jQuery arma la URL así: /listaChoferes?idEmpresa=X
+        data: {
+            //idEmpresa: parseInt(idEmpresa) || 0
+            idEmpresa: parseInt(useriGlobal.IdEmpresa) || 0
+        },
+        dataType: "json",
+        success: function (json) {
+            if (json.Estado) {
+                // Imprimimos la data limpia en consola como solicitaste
+                console.log("Datos obtenidos del servidor:", json.Data);
+
+                // Si quisieras recorrerlos para verlos uno por uno:
+                // json.Data.forEach(chofer => console.log(chofer.NombreCompleto));
+            } else {
+                mostrarAlertaZero("Mensaje", json.Mensaje, "warning");
+            }
+        },
+        error: function (xhr, status, error) {
+            console.log("Estado HTTP:", xhr.status, "Detalles:", error);
+            mostrarAlertaZero("¡Atención!", "Error de comunicación, el servidor no está disponible.", "error");
+        }
+    });
+}
+
 // fin
